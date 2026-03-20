@@ -1,3 +1,4 @@
 zwift-env/
 *.ipynb
+*.py
 .DS_Store
