@@ -9,7 +9,7 @@ st.set_page_config(page_title="TNP Race Results", layout="wide")
 
 # --- 0. EXTERNAL LINKS ---
 # We use columns to keep the buttons in a tight row at the top
-link_col1, link_col2, link_col3, _ = st.columns([2, 1, 1, 4]) 
+link_col1, link_col2, link_col3, _ = st.columns([2, 1, 1, 4])  
 
 with link_col1:
     logo_path = "icons/TNP.png" 
