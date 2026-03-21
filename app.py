@@ -22,8 +22,17 @@ with link_col2:
 st.divider() # Adds a clean line between your external links and the app navigation
 
 @st.cache_data
-def load_excel_data(file_path):
-    """Caches the excel reading so switching sheets is nearly instant."""
+# def load_excel_data(file_path):
+#     """Caches the excel reading so switching sheets is nearly instant."""
+#     if os.path.exists(file_path):
+#         return pd.read_excel(file_path, sheet_name=None)
+#     return None
+@st.cache_data
+def load_excel_data(file_path, last_modified):
+    """
+    By adding last_modified as an argument, Streamlit will 
+    automatically re-run this function whenever the file changes.
+    """
     if os.path.exists(file_path):
         return pd.read_excel(file_path, sheet_name=None)
     return None
@@ -92,7 +101,19 @@ st.query_params["event"] = selected_event
 
 # Load Data
 config = EVENT_CONFIG[selected_event]
-all_sheets = load_excel_data(config["file"])
+file_path = config["file"]
+
+# Get the last modification time of the file
+if os.path.exists(file_path):
+    mtime = os.path.getmtime(file_path)
+else:
+    mtime = 0
+
+# Pass that time into the function
+all_sheets = load_excel_data(file_path, mtime)
+
+# config = EVENT_CONFIG[selected_event]
+# all_sheets = load_excel_data(config["file"])
 
 if all_sheets is None:
     st.error(f"File not found: {config['file']}")
