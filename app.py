@@ -9,13 +9,15 @@ st.set_page_config(page_title="TNP Race Results", layout="wide")
 
 # --- 0. EXTERNAL LINKS ---
 # We use columns to keep the buttons in a tight row at the top
-link_col1, link_col2, link_col3, _ = st.columns([1, 1, 1, 4]) 
+link_col1, link_col2, link_col3, _ = st.columns([2, 1, 1, 4]) 
 
 with link_col1:
-    st.link_button("TNP website", "https://team-not-pogi-hub.vercel.app/")
+    logo_path = "icons/TNP.png" 
+    if os.path.exists(logo_path):
+        st.image(logo_path, width=200)
 
 with link_col2:
-    st.link_button("TNP Results", "https://team-not-pogi-hub.vercel.app/results")
+    st.link_button("TNP website", "https://team-not-pogi-hub.vercel.app/")
 
 st.divider() # Adds a clean line between your external links and the app navigation
 
@@ -69,6 +71,11 @@ EVENT_CONFIG = {
     "Spring Classics": {
         "file": "SpringClassics/SpringClassics.xlsx",
         "default_sheet": "Ride the White Roads race 1",
+        "sorting": lambda sheet: (['pen', 'gap'],[True, True]) if 'race' in sheet else (['pen', 'gap'],[True, True])
+    },
+    "Total Non-Stop Power (iTT)": {
+        "file": "NonStopPower/NonStopPower.xlsx",
+        "default_sheet": "Overall",
         "sorting": lambda sheet: (['pen', 'gap'],[True, True]) if 'race' in sheet else (['pen', 'gap'],[True, True])
     }
 }
@@ -128,12 +135,7 @@ if not filtered_df.empty:
     m1.metric("Total Participants", len(df))
     if 'pen' in filtered_df.columns:
         m2.metric("Filtered Count", len(filtered_df))
-    if selected_event != "Spring Classics":
-        if 'name' in filtered_df.columns:
-            m3.metric("Current Leader", filtered_df['name'].iloc[0])
-        if 'total_points' in filtered_df.columns:
-            m4.metric("Top Points", f"{filtered_df['total_points'].max()} pts")
-    else:
+    if selected_event == "Spring Classics" or selected_event == "Total Non-Stop Power (iTT)":
         if 'avg_power' in filtered_df.columns:
             m3.metric("Highest Power", str(
                       np.round(filtered_df['avg_power'].loc[filtered_df['avg_power'] == filtered_df['avg_power'].max()].iloc[0])) + "W",
@@ -142,6 +144,11 @@ if not filtered_df.empty:
             m4.metric("Highest W/kg", str(
                       np.round(filtered_df['avg_wkg'].loc[filtered_df['avg_wkg'] == filtered_df['avg_wkg'].max()].iloc[0],3)) + "W/kg",
                       filtered_df['name'].loc[filtered_df['avg_wkg'] == filtered_df['avg_wkg'].max()].iloc[0])
+    else:
+        if 'name' in filtered_df.columns:
+            m3.metric("Current Leader", filtered_df['name'].iloc[0])
+        if 'total_points' in filtered_df.columns:
+            m4.metric("Top Points", f"{filtered_df['total_points'].max()} pts")
 
 # --- 6. STYLING & DISPLAY ---
 def highlight_podium(row):
