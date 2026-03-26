@@ -90,7 +90,7 @@ EVENT_CONFIG = {
     "Power Test (Beta)": {
         "file": "PowerTest/PowerTest.xlsx",
         "default_sheet": "The Grade",
-        "sorting": lambda sheet: (['pen', 'time'],[True, False]) if 'race' in sheet else (['pen', 'time'],[True,False])
+        "sorting": lambda sheet: (['pen', 'time'],[True, True]) if 'race' in sheet else (['pen', 'time'],[True,True])
     }
 }
 
