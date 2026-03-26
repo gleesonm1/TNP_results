@@ -170,15 +170,6 @@ if not filtered_df.empty:
             m4.metric("Highest W/kg", str(
                       np.round(filtered_df['avg_wkg'].loc[filtered_df['avg_wkg'] == filtered_df['avg_wkg'].max()].iloc[0],3)) + "W/kg",
                       filtered_df['name'].loc[filtered_df['avg_wkg'] == filtered_df['avg_wkg'].max()].iloc[0])
-    elif selected_event == "Power Test (Beta)":
-        if 'Watts' in filtered_df.columns:
-            m3.metric("Highest Power", str(
-                      np.round(filtered_df['Watts'].loc[filtered_df['Watts'] == filtered_df['Watts'].max()].iloc[0])) + "W",
-                      filtered_df['name'].loc[filtered_df['Watts'] == filtered_df['Watts'].max()].iloc[0])
-        if 'W/kg' in filtered_df.columns:
-            m4.metric("Highest W/kg", str(
-                      np.round(filtered_df['W/kg'].loc[filtered_df['W/kg'] == filtered_df['W/kg'].max()].iloc[0],3)) + "W/kg",
-                      filtered_df['name'].loc[filtered_df['W/kg'] == filtered_df['W/kg'].max()].iloc[0])
     else:
         if 'name' in filtered_df.columns:
             m3.metric("Current Leader", filtered_df['name'].iloc[0])
@@ -186,6 +177,10 @@ if not filtered_df.empty:
             m4.metric("Top Points", f"{filtered_df['total_points'].max()} pts")
         elif 'final_points' in filtered_df.columns:
             m4.metric("Top Points", f"{filtered_df['final_points'].max()} pts")
+        elif 'W/kg' in filtered_df.columns:
+            m4.metric("Highest W/kg", str(
+                      np.round(filtered_df['W/kg'].loc[filtered_df['W/kg'] == filtered_df['W/kg'].max()].iloc[0],3)) + " W/kg",
+                      filtered_df['name'].loc[filtered_df['W/kg'] == filtered_df['W/kg'].max()].iloc[0])
 
 # --- 6. STYLING & DISPLAY ---
 def highlight_podium(row):
