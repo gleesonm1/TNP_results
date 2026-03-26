@@ -65,7 +65,7 @@ EVENT_CONFIG = {
     "The Next Peak": {
         "file": "TheNextPeak/TheNextPeak__March_results.xlsx",
         "default_sheet": "GC",
-        "sorting": lambda sheet: (['pen', 'total_points'], [True, False]) if sheet == "GC" else (['pen', 'gap'], [True, True]),
+        "sorting": lambda sheet: (['pen', 'final_points'], [True, False]) if sheet == "GC" else (['pen', 'gap'], [True, True]),
     },
     "London-Watopia": {
         "file": "MarchSeries/London_Watopia.xlsx",
@@ -170,6 +170,8 @@ if not filtered_df.empty:
             m3.metric("Current Leader", filtered_df['name'].iloc[0])
         if 'total_points' in filtered_df.columns:
             m4.metric("Top Points", f"{filtered_df['total_points'].max()} pts")
+        elif 'final_points' in filtered_df.columns:
+            m4.metric("Top Points", f"{filtered_df['final_points'].max()} pts")
 
 # --- 6. STYLING & DISPLAY ---
 def highlight_podium(row):
@@ -183,6 +185,7 @@ column_main_config = {
     "name": "Rider",
     "team_name": "Team",
     "total_points": st.column_config.NumberColumn("Points", format="%d ⭐"),
+    "final_points": st.column_config.NumberColumn("Points", format="%d ⭐"),
     "total_time": "Time",
     "time_offset": "Gap",
 }
