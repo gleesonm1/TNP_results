@@ -87,7 +87,7 @@ EVENT_CONFIG = {
         "default_sheet": "Overall",
         "sorting": lambda sheet: (['pen', 'gap'],[True, True]) if 'race' in sheet else (['pen', 'gap'],[True, True])
     },
-    "Power Test (Beta)": {
+    "Power Test": {
         "file": "PowerTest/PowerTest.xlsx",
         "default_sheet": "The Grade",
         "sorting": lambda sheet: (['pen', 'time'],[True, True]) if 'race' in sheet else (['pen', 'time'],[True,True])
