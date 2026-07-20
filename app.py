@@ -142,6 +142,23 @@ sheet_idx = sheet_names.index(url_sheet) if url_sheet in sheet_names else 0
 selected_sheet = st.selectbox("Select Leaderboard View", options=sheet_names, index=sheet_idx)
 st.query_params["sheet"] = selected_sheet
 
+# --- ADD RULES AND INSTRUCTIONS ---
+if selected_event == "La Blanca":
+    st.markdown("""
+The next TNP Tour is here... and this one is going to be special. 🤍
+
+⛰️ 5 stages across 10 days  
+🌍 Scotland 🇬🇧 | Watopia 🌴 | Italy 🇮🇹 | London 🇬🇧 | France 🇫🇷  
+🏆 Four competitions:  
+⚪ General Classification  
+⚫ Team Classification  
+🔴 King of the Mountains  
+🟢 Sprint Competition  
+
+Every second counts, whether you're chasing the white jersey, helping your team, or hunting mountain and sprint points.
+    """)
+# ---------------------------------------
+
 # --- 4. DATA PROCESSING ---
 df = all_sheets[selected_sheet]
 if selected_sheet != "Team GC": # Skip cleaning for specific aggregate sheets if needed
