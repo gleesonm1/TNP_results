@@ -78,7 +78,7 @@ EVENT_CONFIG = {
             (['pen', 'Total Points'], [True, False])
     },
     "La Blanca": {
-        "file": "LaBlanca/LaBlancaGC.xlsx",
+        "file": "LaBlanca/LaBlanca.xlsx",
         "default_sheet": "GC",
         "sorting": lambda sheet: 
             (['pen', 'time_offset'], [True, True]) if sheet == "GC" else
