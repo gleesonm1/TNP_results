@@ -62,11 +62,11 @@ def create_rider_links(row):
 # --- 2. THE LOGIC ENGINE (Configuration) ---
 # Add new races here. The app will automatically handle the rest.
 EVENT_CONFIG = {
-    "The Next Peak": {
-        "file": "TheNextPeak/TheNextPeak__March_results.xlsx",
-        "default_sheet": "GC",
-        "sorting": lambda sheet: (['pen', 'final_points'], [True, False]) if sheet == "GC" else (['pen', 'gap'], [True, True]),
-    },
+    # "The Next Peak": {
+    #     "file": "TheNextPeak/TheNextPeak__March_results.xlsx",
+    #     "default_sheet": "GC",
+    #     "sorting": lambda sheet: (['pen', 'final_points'], [True, False]) if sheet == "GC" else (['pen', 'gap'], [True, True]),
+    # },
     "London-Watopia": {
         "file": "MarchSeries/London_Watopia.xlsx",
         "default_sheet": "GC",
@@ -77,21 +77,31 @@ EVENT_CONFIG = {
             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
             (['pen', 'Total Points'], [True, False])
     },
-    "Spring Classics": {
-        "file": "SpringClassics/SpringClassics.xlsx",
-        "default_sheet": "Ride the White Roads race 1",
-        "sorting": lambda sheet: (['pen', 'gap'],[True, True]) if 'race' in sheet else (['pen', 'gap'],[True, True])
-    },
-    "Total Non-Stop Power (iTT)": {
-        "file": "NonStopPower/NonStopPower.xlsx",
-        "default_sheet": "Overall",
-        "sorting": lambda sheet: (['pen', 'gap'],[True, True]) if 'race' in sheet else (['pen', 'gap'],[True, True])
-    },
-    "Power Test": {
-        "file": "PowerTest/PowerTest.xlsx",
-        "default_sheet": "The Grade",
-        "sorting": lambda sheet: (['pen', 'time'],[True, True]) if 'race' in sheet else (['pen', 'time'],[True,True])
+    "La Blanca": {
+        "file": "LaBlanca/LaBlancaGC.xlsx",
+        "default_sheet": "GC",
+        "sorting": lambda sheet: 
+            (['pen', 'time_offset'], [True, True]) if sheet == "GC" else
+            # (['pen', 'races', 'egap'], [True, False, True]) if sheet == "egap" else
+            (['pen', 'races', 'time_offset'], [True, False, True]) if sheet == "Team GC" else
+            (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
+            (['pen', 'Total Points'], [True, False])
     }
+    # "Spring Classics": {
+    #     "file": "SpringClassics/SpringClassics.xlsx",
+    #     "default_sheet": "Ride the White Roads race 1",
+    #     "sorting": lambda sheet: (['pen', 'gap'],[True, True]) if 'race' in sheet else (['pen', 'gap'],[True, True])
+    # },
+    # "Total Non-Stop Power (iTT)": {
+    #     "file": "NonStopPower/NonStopPower.xlsx",
+    #     "default_sheet": "Overall",
+    #     "sorting": lambda sheet: (['pen', 'gap'],[True, True]) if 'race' in sheet else (['pen', 'gap'],[True, True])
+    # },
+    # "Power Test": {
+    #     "file": "PowerTest/PowerTest.xlsx",
+    #     "default_sheet": "The Grade",
+    #     "sorting": lambda sheet: (['pen', 'time'],[True, True]) if 'race' in sheet else (['pen', 'time'],[True,True])
+    # }
 }
 
 # --- 3. URL & NAVIGATION ---
