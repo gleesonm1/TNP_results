@@ -19,7 +19,8 @@ with link_col1:
 with link_col2:
     st.link_button("TNP website", "https://team-not-pogi-hub.vercel.app/")
 
-st.divider() # Adds a clean line between your external links and the app navigation
+# st.divider() # Adds a clean line between your external links and the app navigation
+st.markdown("<hr style='margin-top: 5px; margin-bottom: 5px;'>", unsafe_allow_html=True)
 
 @st.cache_data
 # def load_excel_data(file_path):
