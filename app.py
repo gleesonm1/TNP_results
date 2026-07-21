@@ -14,7 +14,7 @@ link_col1, link_col2, link_col3, _ = st.columns([2, 1, 1, 4])
 with link_col1:
     logo_path = "icons/TNP.png" 
     if os.path.exists(logo_path):
-        st.image(logo_path, width=200)
+        st.image(logo_path, width=100)
 
 with link_col2:
     st.link_button("TNP website", "https://team-not-pogi-hub.vercel.app/")
@@ -62,11 +62,11 @@ def create_rider_links(row):
 # --- 2. THE LOGIC ENGINE (Configuration) ---
 # Add new races here. The app will automatically handle the rest.
 EVENT_CONFIG = {
-    # "The Next Peak": {
-    #     "file": "TheNextPeak/TheNextPeak__March_results.xlsx",
-    #     "default_sheet": "GC",
-    #     "sorting": lambda sheet: (['pen', 'final_points'], [True, False]) if sheet == "GC" else (['pen', 'gap'], [True, True]),
-    # },
+    "The Next Peak": {
+        "file": "TheNextPeak/TheNextPeak__March_results.xlsx",
+        "default_sheet": "GC",
+        "sorting": lambda sheet: (['pen', 'final_points'], [True, False]) if sheet == "GC" else (['pen', 'gap'], [True, True]),
+    },
     "London-Watopia": {
         "file": "MarchSeries/London_Watopia.xlsx",
         "default_sheet": "GC",
@@ -146,8 +146,6 @@ st.query_params["sheet"] = selected_sheet
 if selected_event == "La Blanca":
     st.markdown("""
 ## La Blanca
-                
-The next TNP Tour is here... and this one is going to be special. 🤍
 
 ⛰️ 5 stages across 10 days  
 🌍 **Scotland** 🇬🇧 | **Watopia** 🌴 | **Italy** 🇮🇹 | **London** 🇬🇧 | **France** 🇫🇷  
@@ -156,23 +154,21 @@ The next TNP Tour is here... and this one is going to be special. 🤍
 ⚫ Team Classification  
 🔴 King of the Mountains  
 🟢 Sprint Competition  
-
-Every second counts, whether you're chasing the white jersey, helping your team, or hunting mountain and sprint points.
                 
 ## Rules
 Total time across the 5 stages will determine the GC winner. For team GC the best three times for each team on each stage will be counted. We won't calculate egap initially, this may change based on demand and numbers.
-                
+
 ### Sprint and KQOM standings
-There are three sprint segments (stages 1, 2 and 5). Each will be scored via FTS. Points will be awarded to the top 15 times (across all races) in each category from 20 points for 1st to 1 point for 15th:
-                20, 18, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+There are three sprint segments (stages 1, 2 and 5). Each will be scored via FTS. Points will be awarded to the top 15 times (across all races) in each category from 20 points for 1st to 1 point for 15th:  
+* 20, 18, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
 
 There are 8 registered KQOM segments split across stages 1 and 4. These will also be scored via FTS, taking the best times across all races. The climbs are split into three categories and scored appropriately:
-    Category 3 - Breakaway Brae, Breakaway Brae Reverse, The Clyde Kicker
-        Points: 5, 3, 2, 1
-    Category 2 - Sgurr Summit North, Sgurr Summit South, London Fox Hill, London Leith Hill
-        Points: 10, 8, 6, 5, 4, 3, 2, 1
-    Category 1 - London Keith Hill
-        Points: 20, 15, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1
+* **Category 3** – Breakaway Brae, Breakaway Brae Reverse, The Clyde Kicker
+  * Points: 5, 3, 2, 1
+* **Category 2** – Sgurr Summit North, Sgurr Summit South, London Fox Hill, London Leith Hill
+  * Points: 10, 8, 6, 5, 4, 3, 2, 1
+* **Category 1** – London Keith Hill
+  * Points: 20, 15, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1
     """)
 # ---------------------------------------
 
