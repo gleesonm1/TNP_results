@@ -111,8 +111,9 @@ event_list = list(EVENT_CONFIG.keys())
 url_event = st.query_params.get("event", event_list[0])
 event_idx = event_list.index(url_event) if url_event in event_list else 0
 
-st.write("### Select Event")
-selected_event = st.radio("Event", options=event_list, index=event_idx, horizontal=True, label_visibility="collapsed")
+# st.write("### Select Event")
+# selected_event = st.radio("Event", options=event_list, index=event_idx, horizontal=True, label_visibility="collapsed")
+selected_event = st.radio("**Select Event**", options=event_list, index=event_idx, horizontal=True)
 st.query_params["event"] = selected_event
 
 # Load Data
