@@ -141,9 +141,6 @@ sheet_names = list(all_sheets.keys())
 url_sheet = st.query_params.get("sheet", config["default_sheet"])
 sheet_idx = sheet_names.index(url_sheet) if url_sheet in sheet_names else 0
 
-selected_sheet = st.selectbox("Select Leaderboard View", options=sheet_names, index=sheet_idx)
-st.query_params["sheet"] = selected_sheet
-
 # --- ADD RULES AND INSTRUCTIONS ---
 if selected_event == "La Blanca":
     st.markdown("""
@@ -177,6 +174,9 @@ There are 8 registered KQOM segments split across stages 1 and 4. These will als
   * Points: 20, 15, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1
     """)
 # ---------------------------------------
+
+selected_sheet = st.selectbox("Select Leaderboard View", options=sheet_names, index=sheet_idx)
+st.query_params["sheet"] = selected_sheet
 
 # --- 4. DATA PROCESSING ---
 df = all_sheets[selected_sheet]
