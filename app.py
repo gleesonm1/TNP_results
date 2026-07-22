@@ -148,6 +148,8 @@ st.query_params["sheet"] = selected_sheet
 if selected_event == "La Blanca":
     st.markdown("""
 ## La Blanca
+                
+**Results will be updated at least twice a day, at approximately 8 am and 10 pm Pacific Time**
 
 ⛰️ 5 stages across 10 days  
 🌍 **Scotland** 🇬🇧 | **Watopia** 🌴 | **Italy** 🇮🇹 | **London** 🇬🇧 | **France** 🇫🇷  
@@ -161,6 +163,8 @@ if selected_event == "La Blanca":
 Total time across the 5 stages will determine the GC winner. For team GC the best three times for each team on each stage will be counted. We won't calculate egap initially, this may change based on demand and numbers.
 
 ### Sprint and KQOM standings
+To be included in the Spint/KQOM standings you must complete every stage!
+
 There are three sprint segments (stages 1, 2 and 5). Each will be scored via FTS. Points will be awarded to the top 15 times (across all races) in each category from 20 points for 1st to 1 point for 15th:  
 * 20, 18, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
 
