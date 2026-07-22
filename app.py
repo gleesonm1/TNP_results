@@ -84,7 +84,7 @@ EVENT_CONFIG = {
         "sorting": lambda sheet: 
             (['pen', 'total_time'], [True, True]) if sheet == "GC" else
             # (['pen', 'races', 'egap'], [True, False, True]) if sheet == "egap" else
-            (['pen', 'races', 'total_time'], [True, False, True]) if sheet == "Team GC" else
+            (['pen', 'racers', 'total_time'], [True, False, True]) if sheet == "Team GC" else
             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
             (['pen', 'Total Points'], [True, False])
     }
