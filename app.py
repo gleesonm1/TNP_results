@@ -82,9 +82,9 @@ EVENT_CONFIG = {
         "file": "LaBlanca/LaBlanca.xlsx",
         "default_sheet": "GC",
         "sorting": lambda sheet: 
-            (['pen', 'time_offset'], [True, True]) if sheet == "GC" else
+            (['pen', 'total_time'], [True, True]) if sheet == "GC" else
             # (['pen', 'races', 'egap'], [True, False, True]) if sheet == "egap" else
-            (['pen', 'races', 'time_offset'], [True, False, True]) if sheet == "Team GC" else
+            (['pen', 'races', 'total_time'], [True, False, True]) if sheet == "Team GC" else
             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
             (['pen', 'Total Points'], [True, False])
     }
