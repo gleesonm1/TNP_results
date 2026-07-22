@@ -180,15 +180,28 @@ st.query_params["sheet"] = selected_sheet
 
 # --- 4. DATA PROCESSING ---
 df = all_sheets[selected_sheet]
-if selected_sheet != "Team GC": # Skip cleaning for specific aggregate sheets if needed
+if selected_sheet != "Team GC":
     df = clean_data(df)
 
-# if 'zwift_id' in df.columns:
-#     df['name'] = df.apply(create_rider_links, axis=1)
+# 1. Create a temporary numeric time column for accurate sorting
+if 'total_time' in df.columns:
+    # If a time is only "MM:SS.ms" (1 colon), prepend "00:" so pandas reads it as "HH:MM:SS.ms"
+    time_str = df['total_time'].astype(str).apply(lambda x: '00:' + x if str(x).count(':') == 1 else x)
+    df['temp_sort_time'] = pd.to_timedelta(time_str, errors='coerce')
 
 # Apply Sorting from Config
 sort_cols, sort_orders = config["sorting"](selected_sheet)
+
+# 2. If 'total_time' is in the sorting logic, swap it for our temporary time column
+if 'total_time' in sort_cols and 'temp_sort_time' in df.columns:
+    sort_cols = ['temp_sort_time' if c == 'total_time' else c for c in sort_cols]
+
+# 3. Sort and reset index
 df = df.sort_values(by=sort_cols, ascending=sort_orders).reset_index(drop=True)
+
+# 4. Clean up by dropping the temporary column so it doesn't show in the UI
+if 'temp_sort_time' in df.columns:
+    df = df.drop(columns=['temp_sort_time'])
 
 # --- 5. UI & FILTERING ---
 st.title(f"🏆 {selected_event}: {selected_sheet}")
