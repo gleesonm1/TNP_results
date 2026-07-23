@@ -82,7 +82,7 @@ EVENT_CONFIG = {
         "file": "LaBlanca/LaBlanca.xlsx",
         "default_sheet": "GC",
         "sorting": lambda sheet: 
-            (['pen', 'total_time'], [True, True]) if sheet == "GC" else
+            (['races', 'total_time'], [True, True]) if sheet == "GC" else
             # (['pen', 'races', 'egap'], [True, False, True]) if sheet == "egap" else
             (['pen', 'racers', 'total_time'], [True, False, True]) if sheet == "Team GC" else
             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
@@ -242,14 +242,41 @@ if has_pen or has_category:
     # Re-sort strictly by time if 'All' is selected for either filter
     if selected_pen == 'All' or selected_cat == 'All':
         if 'temp_sort_time' in filtered_df.columns:
-            filtered_df = filtered_df.sort_values(by='temp_sort_time', ascending=True)
+            filtered_df = filtered_df.sort_values(by=['races','temp_sort_time'], ascending=[False,True])
         elif 'total_time' in filtered_df.columns:
-            filtered_df = filtered_df.sort_values(by='total_time', ascending=True)
+            filtered_df = filtered_df.sort_values(by=['races','total_time'], ascending=[False,True])
             
     filtered_df = filtered_df.reset_index(drop=True)
-
 else:
     filtered_df = df.copy()
+
+if 'temp_sort_time' in filtered_df.columns and 'races' in filtered_df.columns and not filtered_df.empty:
+    # Find the max races and create a mask for those riders
+    max_races = filtered_df['races'].max()
+    mask = filtered_df['races'] == max_races
+    
+    # Calculate the raw gap using the Timedelta column 
+    # (Index 0 is guaranteed to be the fastest since we just sorted it)
+    fastest_time = filtered_df.loc[0, 'temp_sort_time']
+    raw_gaps = filtered_df.loc[mask, 'temp_sort_time'] - fastest_time
+    
+    # Helper function to convert Timedelta back to "+HH:MM:SS.ms" or "+MM:SS.ms"
+    def format_gap(td):
+        if pd.isna(td) or td.total_seconds() == 0:
+            return "00.000" # Leader / No gap
+        
+        total_sec = td.total_seconds()
+        h = int(total_sec // 3600)
+        m = int((total_sec % 3600) // 60)
+        s = total_sec % 60
+        
+        if h > 0:
+            return f"+{h:02d}:{m:02d}:{s:06.3f}"
+        else:
+            return f"+{m:02d}:{s:06.3f}"
+            
+    # Apply the formatted string back to your gap column
+    filtered_df.loc[mask, 'time_offset'] = raw_gaps.apply(format_gap)
 
 # 4. Clean up by dropping the temporary column so it doesn't show in the UI
 if 'temp_sort_time' in df.columns:
