@@ -199,21 +199,63 @@ if 'total_time' in sort_cols and 'temp_sort_time' in df.columns:
 # 3. Sort and reset index
 df = df.sort_values(by=sort_cols, ascending=sort_orders).reset_index(drop=True)
 
-# 4. Clean up by dropping the temporary column so it doesn't show in the UI
-if 'temp_sort_time' in df.columns:
-    df = df.drop(columns=['temp_sort_time'])
+# # 4. Clean up by dropping the temporary column so it doesn't show in the UI
+# if 'temp_sort_time' in df.columns:
+#     df = df.drop(columns=['temp_sort_time'])
 
 # --- 5. UI & FILTERING ---
 st.title(f"🏆 {selected_event}: {selected_sheet}")
 m1, m2, m3, m4 = st.columns(4)
 st.divider()
 
-if 'pen' in df.columns:
-    categories = sorted(df['pen'].unique().tolist())
-    selected_cats = st.multiselect("Filter by pen", options=categories, default=categories)
-    filtered_df = df[df['pen'].isin(selected_cats)].copy().reset_index(drop=True)
+# Check which columns exist to build our filters
+has_pen = 'pen' in df.columns
+has_category = 'category' in df.columns
+
+if has_pen or has_category:
+    # Create two side-by-side columns for the filters
+    filter_col1, filter_col2 = st.columns(2)
+    
+    # Initialize defaults
+    selected_pen = 'All'
+    selected_cat = 'All'
+    
+    if has_pen:
+        with filter_col1:
+            pen_options = ['All'] + sorted(df['pen'].dropna().unique().tolist())
+            selected_pen = st.selectbox("Filter by pen", options=pen_options, index=0)
+            
+    if has_category:
+        with filter_col2:
+            cat_options = ['All'] + sorted(df['category'].dropna().unique().tolist())
+            selected_cat = st.selectbox("Filter by category", options=cat_options, index=0)
+
+    # Apply the filters to a copy of the dataframe
+    filtered_df = df.copy()
+    
+    if selected_pen != 'All':
+        filtered_df = filtered_df[filtered_df['pen'] == selected_pen]
+        
+    if selected_cat != 'All':
+        filtered_df = filtered_df[filtered_df['category'] == selected_cat]
+        
+    # Re-sort strictly by time if 'All' is selected for either filter
+    if selected_pen == 'All' or selected_cat == 'All':
+        if 'temp_sort_time' in filtered_df.columns:
+            filtered_df = filtered_df.sort_values(by='temp_sort_time', ascending=True)
+        elif 'total_time' in filtered_df.columns:
+            filtered_df = filtered_df.sort_values(by='total_time', ascending=True)
+            
+    filtered_df = filtered_df.reset_index(drop=True)
+
 else:
     filtered_df = df.copy()
+
+# 4. Clean up by dropping the temporary column so it doesn't show in the UI
+if 'temp_sort_time' in df.columns:
+    df = df.drop(columns=['temp_sort_time'])
+if 'temp_sort_time' in filtered_df.columns:
+    filtered_df = filtered_df.drop(columns=['temp_sort_time'])
 
 # Metric Logic
 if not filtered_df.empty:
