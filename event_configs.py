@@ -26,6 +26,15 @@ EVENT_CONFIG = {
             (['pen', 'racers', 'total_time'], [True, False, True]) if sheet == "Team GC" else
             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
             (['pen', 'Total Points'], [True, False])
+    },
+    "La Blanca": {
+        "file": "LaRoja/LaBlanca.xlsx",
+        "default_sheet": "GC",
+        "sorting": lambda sheet: 
+            (['races', 'total_time'], [True, True]) if sheet == "GC" else
+            (['pen', 'racers', 'total_time'], [True, False, True]) if sheet == "Team GC" else
+            (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
+            (['pen', 'Total Points'], [True, False])
     }
 }
 
@@ -33,7 +42,10 @@ EVENT_CONFIG = {
 def render_event_info(selected_event):
     """Renders images, rules, and announcements for the selected event."""
     if selected_event == "La Blanca":
-        st.markdown("## La Blanca")
+        st.markdown("""
+                    # La Blanca
+                    ### Why not check out our upcoming La Roja tour using the link above.
+                    """)
         
         # Display image if present
         hero_image = "icons/La_Blanca_hero.jpeg"
@@ -42,14 +54,6 @@ def render_event_info(selected_event):
 
         st.markdown("""
 **Results will be updated at least twice a day, at approximately 8 am and 10 pm Pacific Time**
-
-⛰️ 5 stages across 10 days  
-🌍 **Scotland** 🇬🇧 | **Watopia** 🌴 | **Italy** 🇮🇹 | **London** 🇬🇧 | **France** 🇫🇷  
-🏆 Four competitions:  
-⚪ General Classification  
-⚫ Team Classification  
-🔴 King of the Mountains  
-🟢 Sprint Competition  
                 
 ## Rules
 Total time across the 5 stages will determine the GC winner. For team GC the best three times for each team on each stage will be counted. We won't calculate egap initially, this may change based on demand and numbers.
@@ -67,6 +71,24 @@ There are 8 registered KQOM segments split across stages 1 and 4. These will als
   * Points: 10, 8, 6, 5, 4, 3, 2, 1
 * **Category 1** – London Keith Hill
   * Points: 20, 15, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1
+        """)
+
+    elif selected_event == "La Roja":
+        st.markdown("## La Roja")
+        
+        # Display image if present
+        hero_image = "icons/La_Roja_Tour_poster.png"
+        if os.path.exists(hero_image):
+            st.image(hero_image, width=600)
+
+        st.markdown("""
+**Results will be updated at least twice a day, at approximately 8 am and 10 pm Pacific Time**
+                
+## Rules
+Total time across the 5 stages will determine the GC winner. For team GC the best three times for each team on each stage will be counted. We won't calculate egap initially, this may change based on demand and numbers.
+
+### Sprint and KQOM standings
+TBD
         """)
 
     elif selected_event == "London-Watopia":
