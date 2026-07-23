@@ -242,18 +242,28 @@ if has_pen or has_category:
     # Re-sort strictly by time if 'All' is selected for either filter
     if selected_pen == 'All' or selected_cat == 'All':
         if 'temp_sort_time' in filtered_df.columns:
-            filtered_df = filtered_df.sort_values(by=['races','temp_sort_time'], ascending=[False,True])
+            if selected_sheet == "GC":
+                filtered_df = filtered_df.sort_values(by=['races','temp_sort_time'], ascending=[False,True])
+            if selected_sheet == "Team GC":
+                filtered_df = filtered_df.sort_values(by=['racers','temp_sort_time'], ascending=[False,True])
         elif 'total_time' in filtered_df.columns:
-            filtered_df = filtered_df.sort_values(by=['races','total_time'], ascending=[False,True])
+            if selected_sheet == "GC":
+                filtered_df = filtered_df.sort_values(by=['races','total_time'], ascending=[False,True])
+            elif selected_sheet == "Team GC":
+                filtered_df = filtered_df.sort_values(by=['racers','total_time'], ascending=[False,True])
             
     filtered_df = filtered_df.reset_index(drop=True)
 else:
     filtered_df = df.copy()
 
-if 'temp_sort_time' in filtered_df.columns and 'races' in filtered_df.columns and not filtered_df.empty:
+if 'temp_sort_time' in filtered_df.columns and not filtered_df.empty:
     # Find the max races and create a mask for those riders
-    max_races = filtered_df['races'].max()
-    mask = filtered_df['races'] == max_races
+    if 'races' in filtered_df.columns:
+        max_races = filtered_df['races'].max()
+        mask = filtered_df['races'] == max_races
+    elif 'racers' in filtered_df.columns:
+        max_races = filtered_df['racers'].max()
+        mask = filtered_df['racers'] == max_races
     
     # Calculate the raw gap using the Timedelta column 
     # (Index 0 is guaranteed to be the fastest since we just sorted it)
