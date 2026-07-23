@@ -27,8 +27,8 @@ EVENT_CONFIG = {
             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
             (['pen', 'Total Points'], [True, False])
     },
-    "La Blanca": {
-        "file": "LaRoja/LaBlanca.xlsx",
+    "La Roja": {
+        "file": "LaRoja/LaRoja.xlsx",
         "default_sheet": "GC",
         "sorting": lambda sheet: 
             (['races', 'total_time'], [True, True]) if sheet == "GC" else
