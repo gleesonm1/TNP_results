@@ -226,7 +226,7 @@ if has_pen or has_category:
             selected_pen = st.selectbox("Filter by pen", options=pen_options, index=0)
             
     if has_category:
-        if selected_sheet is not "KQOM" or selected_sheet is not "Sprints":
+        if selected_sheet is not "KQOM" and selected_sheet is not "Sprints":
             with filter_col2:
                 cat_options = ['All'] + sorted(df['category'].dropna().unique().tolist())
                 selected_cat = st.selectbox("Filter by category", options=cat_options, index=0)
