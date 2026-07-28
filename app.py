@@ -276,6 +276,7 @@ if 'temp_sort_time' in filtered_df.columns and not filtered_df.empty:
             return f"+{m:02d}:{s:06.3f}"
             
     # Apply the formatted string back to your gap column
+    filtered_df["time_offset"] = ""
     filtered_df.loc[mask, 'time_offset'] = raw_gaps.apply(format_gap)
 
 # 4. Clean up by dropping the temporary column so it doesn't show in the UI
