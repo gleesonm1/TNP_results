@@ -56,8 +56,6 @@ def create_rider_links(row):
     
     return f"{name} ([ZR]({zp_url}))"# [ZRapp]({zr_url}))"
 
-import textwrap  # Add this import at the top of your app.py
-
 def render_podium(df):
     """Renders a responsive 3-step podium for the top 3 riders in the filtered dataframe."""
     if df.empty or 'name' not in df.columns:
@@ -91,20 +89,20 @@ def render_podium(df):
                 {p2_team}
             </div>
             <div style="background: linear-gradient(180deg, #C0C0C0 0%, #7F8C8D 100%); height: 80px; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.4em; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-                🥈 2nd
+                2nd
             </div>
         </div>
 
         <!-- 1st Place (Gold) -->
         <div style="flex: 1; max-width: 240px; text-align: center;">
             <div style="font-size: 1.1em; font-weight: 700; color: #FFD700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{p1_name}">
-                👑 {p1_name}
+                {p1_name}
             </div>
             <div style="font-size: 0.8em; color: #AAA; margin-bottom: 8px; height: 1.2em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{p1_team}">
                 {p1_team}
             </div>
             <div style="background: linear-gradient(180deg, #FFD700 0%, #D4AF37 100%); height: 115px; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: center; color: #111; font-weight: bold; font-size: 1.6em; box-shadow: 0 6px 14px rgba(212,175,55,0.4);">
-                🥇 1st
+                1st
             </div>
         </div>
 
@@ -117,14 +115,14 @@ def render_podium(df):
                 {p3_team}
             </div>
             <div style="background: linear-gradient(180deg, #CD7F32 0%, #8B4513 100%); height: 60px; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.3em; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-                🥉 3rd
+                3rd
             </div>
         </div>
 
     </div>
     """
 
-    st.markdown(podium_html, unsafe_allow_html=True)
+    st.html(podium_html)
 
 # --- 3. URL & NAVIGATION ---
 event_list = list(EVENT_CONFIG.keys())
