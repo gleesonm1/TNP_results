@@ -230,17 +230,17 @@ if has_pen or has_category or has_age:
         filtered_df = filtered_df[filtered_df['age'] == selected_age]
         
     # Re-sort strictly by time if 'All' is selected for either filter
-    if selected_pen == 'All' or selected_cat == 'All':
-        if 'temp_sort_time' in filtered_df.columns:
-            if selected_sheet == "GC":
-                filtered_df = filtered_df.sort_values(by=['races','temp_sort_time'], ascending=[False,True])
-            if selected_sheet == "Team GC":
-                filtered_df = filtered_df.sort_values(by=['racers','temp_sort_time'], ascending=[False,True])
-        elif 'total_time' in filtered_df.columns:
-            if selected_sheet == "GC":
-                filtered_df = filtered_df.sort_values(by=['races','total_time'], ascending=[False,True])
-            elif selected_sheet == "Team GC":
-                filtered_df = filtered_df.sort_values(by=['racers','total_time'], ascending=[False,True])
+    # if selected_pen == 'All' or selected_cat == 'All':
+    if 'temp_sort_time' in filtered_df.columns:
+        if selected_sheet == "GC":
+            filtered_df = filtered_df.sort_values(by=['races','temp_sort_time'], ascending=[False,True])
+        if selected_sheet == "Team GC":
+            filtered_df = filtered_df.sort_values(by=['racers','temp_sort_time'], ascending=[False,True])
+    elif 'total_time' in filtered_df.columns:
+        if selected_sheet == "GC":
+            filtered_df = filtered_df.sort_values(by=['races','total_time'], ascending=[False,True])
+        elif selected_sheet == "Team GC":
+            filtered_df = filtered_df.sort_values(by=['racers','total_time'], ascending=[False,True])
             
     filtered_df = filtered_df.reset_index(drop=True)
 else:
