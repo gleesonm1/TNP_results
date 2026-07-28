@@ -56,6 +56,8 @@ def create_rider_links(row):
     
     return f"{name} ([ZR]({zp_url}))"# [ZRapp]({zr_url}))"
 
+import textwrap  # Add this import at the top of your app.py
+
 def render_podium(df):
     """Renders a responsive 3-step podium for the top 3 riders in the filtered dataframe."""
     if df.empty or 'name' not in df.columns:
@@ -76,7 +78,8 @@ def render_podium(df):
     p2_name, p2_team = get_rider(1)
     p3_name, p3_team = get_rider(2)
 
-    podium_html = f"""
+    # textwrap.dedent removes leading whitespace/indentation so Streamlit doesn't render it as a code block
+    podium_html = textwrap.dedent(f"""
     <div style="display: flex; align-items: flex-end; justify-content: center; gap: 16px; margin: 20px 0 30px 0;">
         
         <!-- 2nd Place (Silver) -->
@@ -119,7 +122,8 @@ def render_podium(df):
         </div>
 
     </div>
-    """
+    """)
+
     st.markdown(podium_html, unsafe_allow_html=True)
 
 # --- 3. URL & NAVIGATION ---
