@@ -79,7 +79,7 @@ def render_podium(df):
     p3_name, p3_team = get_rider(2)
 
     # textwrap.dedent removes leading whitespace/indentation so Streamlit doesn't render it as a code block
-    podium_html = textwrap.dedent(f"""
+    podium_html = f"""
     <div style="display: flex; align-items: flex-end; justify-content: center; gap: 16px; margin: 20px 0 30px 0;">
         
         <!-- 2nd Place (Silver) -->
@@ -122,7 +122,7 @@ def render_podium(df):
         </div>
 
     </div>
-    """)
+    """
 
     st.markdown(podium_html, unsafe_allow_html=True)
 
@@ -208,13 +208,13 @@ if has_pen or has_category or has_age:
 
     if selected_sheet == "GC":       
         if has_category:
-            if selected_sheet is not "KQOM" and selected_sheet is not "Sprints":
+            if selected_sheet != "KQOM" and selected_sheet != "Sprints":
                 with filter_col2:
                     cat_options = ['All'] + sorted(df['category'].dropna().unique().tolist())
                     selected_cat = st.selectbox("Filter by category", options=cat_options, index=0)
         
         if has_age:
-            if selected_sheet is not "KQOM" and selected_sheet is not "Sprints":
+            if selected_sheet != "KQOM" and selected_sheet != "Sprints":
                 with filter_col3:
                     age_options = ['All'] + sorted(df['age'].dropna().unique().tolist())
                     selected_age = st.selectbox("Filter by age group", options=age_options, index=0)
@@ -312,7 +312,7 @@ if not filtered_df.empty:
                       np.round(filtered_df['W/kg'].loc[filtered_df['W/kg'] == filtered_df['W/kg'].max()].iloc[0],3)) + " W/kg",
                       filtered_df['name'].loc[filtered_df['W/kg'] == filtered_df['W/kg'].max()].iloc[0])
 
-# render_podium(filtered_df)
+render_podium(filtered_df)
 
 # --- 6. STYLING & DISPLAY ---
 def highlight_podium(row):
