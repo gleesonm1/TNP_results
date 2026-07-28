@@ -3,11 +3,11 @@ import streamlit as st
 
 # --- 1. EVENT CONFIGURATIONS ---
 EVENT_CONFIG = {
-    "The Next Peak": {
-        "file": "TheNextPeak/TheNextPeak__March_results.xlsx",
-        "default_sheet": "GC",
-        "sorting": lambda sheet: (['pen', 'final_points'], [True, False]) if sheet == "GC" else (['pen', 'gap'], [True, True]),
-    },
+    # "The Next Peak": {
+    #     "file": "TheNextPeak/TheNextPeak__March_results.xlsx",
+    #     "default_sheet": "GC",
+    #     "sorting": lambda sheet: (['pen', 'final_points'], [True, False]) if sheet == "GC" else (['pen', 'gap'], [True, True]),
+    # },
     "London-Watopia": {
         "file": "MarchSeries/London_Watopia.xlsx",
         "default_sheet": "GC",

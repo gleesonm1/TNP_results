@@ -32,7 +32,7 @@ round = {'Round 1': [5604847,5604849,5604850,5604851,5604852,5604853],
          'Round 2': [5604922, 5604924,5604925,5604926,5604927,5604928],
          'Round 3': [5604929,5604931,5604932,5604933,5604934,5604935],
          'Round 4': [5604936,5604938,5604939,5604940,5604941,5604942],
-         'Round 5': []}
+         'Round 5': [5604945,5604946,5604947,5604948,5604950]}
 
 pen_order = ['A', 'B', 'C', 'D', 'E']
 pen_rank = {p: i for i, p in enumerate(pen_order)}
@@ -161,8 +161,8 @@ if args.mode == "all":
     #### INDIVIDUAL GC ####
     out = {}
 
-    gc_cols = ['pen', 'category', 'zwift_id', 'name', 'team_name']
-    columns = ['pen', 'category', 'zwift_id', 'name', 'team_name', 'time']
+    gc_cols = ['pen', 'category', 'zwift_id', 'name', 'team_name', 'age']
+    columns = ['pen', 'category', 'zwift_id', 'name', 'team_name', 'age', 'time']
 
     ## Scrape raw result data for the columns listed above.
     dfs = []
@@ -173,10 +173,10 @@ if args.mode == "all":
         if len(race_id) > 0:
             for i in race_id:
                 df = asyncio.run(fetch_race_data(i))
-
+                
                 if len(df)>0:
                     df = df[columns]
-
+                    
                     dfs.append(df)
 
             if len(dfs)>0:
@@ -227,6 +227,7 @@ if args.mode == "all":
             'category': 'first',
             'name': 'first',
             'team_name': 'first',
+            'age': 'first',
             **{c: 'min' for c in time_cols}   # keep round times
         })
     )
@@ -249,7 +250,7 @@ if args.mode == "all":
     gc.sort_values(by = ['pen', 'races', 'total_time'], ascending = [True, False, True], 
                 ignore_index=True, inplace = True)
 
-    out['GC'] = gc[['pen', 'category', 'name', 'team_name', 'total_time', 'time_offset', 'races']]
+    out['GC'] = gc[['pen', 'category', 'age', 'name', 'team_name', 'total_time', 'time_offset', 'races']]
 
     #### TEAM GC ######
     teams = gc['team_name'].unique()
@@ -421,8 +422,8 @@ elif args.mode == "add":
 
     ###### Individual GC ######
 
-    gc_cols = ['pen', 'category', 'zwift_id', 'name', 'team_name']
-    columns = ['pen', 'category', 'zwift_id', 'name', 'team_name', 'time']
+    gc_cols = ['pen', 'category', 'zwift_id', 'name', 'team_name', 'age']
+    columns = ['pen', 'category', 'zwift_id', 'name', 'team_name', 'age', 'time']
 
     with open('gc_raw.pkl', 'rb') as f:
         out = pickle.load(f)
@@ -436,6 +437,7 @@ elif args.mode == "add":
 
         # load new race
         df = asyncio.run(fetch_race_data(i))
+        
         df = df[columns]
 
         res = out[matched_round]
@@ -511,7 +513,7 @@ elif args.mode == "add":
     gc.sort_values(by = ['pen', 'races', 'total_time'], ascending = [True, False, True], 
                 ignore_index=True, inplace = True)
 
-    out['GC'] = gc[['pen', 'category', 'name', 'team_name', 'total_time', 'time_offset', 'races']]
+    out['GC'] = gc[['pen', 'category', 'age', 'name', 'team_name', 'total_time', 'time_offset', 'races']]
 
     #### TEAM GC ######
     teams = gc['team_name'].unique()
