@@ -3,11 +3,6 @@ import streamlit as st
 
 # --- 1. EVENT CONFIGURATIONS ---
 EVENT_CONFIG = {
-    # "The Next Peak": {
-    #     "file": "TheNextPeak/TheNextPeak__March_results.xlsx",
-    #     "default_sheet": "GC",
-    #     "sorting": lambda sheet: (['pen', 'final_points'], [True, False]) if sheet == "GC" else (['pen', 'gap'], [True, True]),
-    # },
     "London-Watopia": {
         "file": "MarchSeries/London_Watopia.xlsx",
         "default_sheet": "GC",
@@ -71,6 +66,10 @@ There are 8 registered KQOM segments split across stages 1 and 4. These will als
   * Points: 10, 8, 6, 5, 4, 3, 2, 1
 * **Category 1** – London Keith Hill
   * Points: 20, 15, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1
+                    
+### GC Classifications
+The main GC classification is based on the pen entered by each rider. As these are mass start events each rider will be classified in the highest pen they entered unless they ride 4 races in a lower pen. Please use the options below to see how the GC would look if you filter by pace category or age group!
+
         """)
 
     elif selected_event == "La Roja":

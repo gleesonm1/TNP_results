@@ -11,7 +11,6 @@ from event_configs import EVENT_CONFIG, render_event_info
 st.set_page_config(page_title="TNP Race Results", layout="wide")
 
 # --- 1. EXTERNAL LINKS ---
-# We use columns to keep the buttons in a tight row at the top
 link_col1, link_col2, link_col3, _ = st.columns([2, 1, 1, 4])  
 
 with link_col1:
@@ -22,15 +21,9 @@ with link_col1:
 with link_col2:
     st.link_button("TNP website", "https://team-not-pogi-hub.vercel.app/")
 
-# st.divider() # Adds a clean line between your external links and the app navigation
 st.markdown("<hr style='margin-top: 5px; margin-bottom: 5px;'>", unsafe_allow_html=True)
 
 @st.cache_data
-# def load_excel_data(file_path):
-#     """Caches the excel reading so switching sheets is nearly instant."""
-#     if os.path.exists(file_path):
-#         return pd.read_excel(file_path, sheet_name=None)
-#     return None
 @st.cache_data
 def load_excel_data(file_path, last_modified):
     """
@@ -62,51 +55,6 @@ def create_rider_links(row):
 
     
     return f"{name} ([ZR]({zp_url}))"# [ZRapp]({zr_url}))"
-
-# --- 2. THE LOGIC ENGINE (Configuration) ---
-# Add new races here. The app will automatically handle the rest.
-# EVENT_CONFIG = {
-#     "The Next Peak": {
-#         "file": "TheNextPeak/TheNextPeak__March_results.xlsx",
-#         "default_sheet": "GC",
-#         "sorting": lambda sheet: (['pen', 'final_points'], [True, False]) if sheet == "GC" else (['pen', 'gap'], [True, True]),
-#     },
-#     "London-Watopia": {
-#         "file": "MarchSeries/London_Watopia.xlsx",
-#         "default_sheet": "GC",
-#         "sorting": lambda sheet: 
-#             (['pen', 'time_offset'], [True, True]) if sheet == "GC" else
-#             (['pen', 'races', 'egap'], [True, False, True]) if sheet == "egap" else
-#             (['pen', 'races', 'time_offset'], [True, False, True]) if sheet == "Team GC" else
-#             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
-#             (['pen', 'Total Points'], [True, False])
-#     },
-#     "La Blanca": {
-#         "file": "LaBlanca/LaBlanca.xlsx",
-#         "default_sheet": "GC",
-#         "sorting": lambda sheet: 
-#             (['races', 'total_time'], [True, True]) if sheet == "GC" else
-#             # (['pen', 'races', 'egap'], [True, False, True]) if sheet == "egap" else
-#             (['pen', 'racers', 'total_time'], [True, False, True]) if sheet == "Team GC" else
-#             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
-#             (['pen', 'Total Points'], [True, False])
-#     }
-    # "Spring Classics": {
-    #     "file": "SpringClassics/SpringClassics.xlsx",
-    #     "default_sheet": "Ride the White Roads race 1",
-    #     "sorting": lambda sheet: (['pen', 'gap'],[True, True]) if 'race' in sheet else (['pen', 'gap'],[True, True])
-    # },
-    # "Total Non-Stop Power (iTT)": {
-    #     "file": "NonStopPower/NonStopPower.xlsx",
-    #     "default_sheet": "Overall",
-    #     "sorting": lambda sheet: (['pen', 'gap'],[True, True]) if 'race' in sheet else (['pen', 'gap'],[True, True])
-    # },
-    # "Power Test": {
-    #     "file": "PowerTest/PowerTest.xlsx",
-    #     "default_sheet": "The Grade",
-    #     "sorting": lambda sheet: (['pen', 'time'],[True, True]) if 'race' in sheet else (['pen', 'time'],[True,True])
-    # }
-# }
 
 # --- 3. URL & NAVIGATION ---
 event_list = list(EVENT_CONFIG.keys())
@@ -143,78 +91,6 @@ sheet_idx = sheet_names.index(url_sheet) if url_sheet in sheet_names else 0
 selected_sheet = st.selectbox("Select Leaderboard View", options=sheet_names, index=sheet_idx)
 st.query_params["sheet"] = selected_sheet
 
-# # Handle Event selection via URL
-# event_list = list(EVENT_CONFIG.keys())
-# url_event = st.query_params.get("event", event_list[0])
-# event_idx = event_list.index(url_event) if url_event in event_list else 0
-
-# # st.write("### Select Event")
-# # selected_event = st.radio("Event", options=event_list, index=event_idx, horizontal=True, label_visibility="collapsed")
-# selected_event = st.radio("**Select Event**", options=event_list, index=event_idx, horizontal=True)
-# st.query_params["event"] = selected_event
-
-# # Load Data
-# config = EVENT_CONFIG[selected_event]
-# file_path = config["file"]
-
-# # Get the last modification time of the file
-# if os.path.exists(file_path):
-#     mtime = os.path.getmtime(file_path)
-# else:
-#     mtime = 0
-
-# # Pass that time into the function
-# all_sheets = load_excel_data(file_path, mtime)
-
-# # config = EVENT_CONFIG[selected_event]
-# # all_sheets = load_excel_data(config["file"])
-
-# if all_sheets is None:
-#     st.error(f"File not found: {config['file']}")
-#     st.stop()
-
-# # Handle Sheet selection via URL
-# sheet_names = list(all_sheets.keys())
-# url_sheet = st.query_params.get("sheet", config["default_sheet"])
-# sheet_idx = sheet_names.index(url_sheet) if url_sheet in sheet_names else 0
-
-# --- ADD RULES AND INSTRUCTIONS ---
-# if selected_event == "La Blanca":
-#     st.markdown("""
-# ## La Blanca
-                
-# **Results will be updated at least twice a day, at approximately 8 am and 10 pm Pacific Time**
-
-# ⛰️ 5 stages across 10 days  
-# 🌍 **Scotland** 🇬🇧 | **Watopia** 🌴 | **Italy** 🇮🇹 | **London** 🇬🇧 | **France** 🇫🇷  
-# 🏆 Four competitions:  
-# ⚪ General Classification  
-# ⚫ Team Classification  
-# 🔴 King of the Mountains  
-# 🟢 Sprint Competition  
-                
-# ## Rules
-# Total time across the 5 stages will determine the GC winner. For team GC the best three times for each team on each stage will be counted. We won't calculate egap initially, this may change based on demand and numbers.
-
-# ### Sprint and KQOM standings
-# To be included in the Spint/KQOM standings you must complete every stage!
-
-# There are three sprint segments (stages 1, 2 and 5). Each will be scored via FTS. Points will be awarded to the top 15 times (across all races) in each category from 20 points for 1st to 1 point for 15th:  
-# * 20, 18, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
-
-# There are 8 registered KQOM segments split across stages 1 and 4. These will also be scored via FTS, taking the best times across all races. The climbs are split into three categories and scored appropriately:
-# * **Category 3** – Breakaway Brae, Breakaway Brae Reverse, The Clyde Kicker
-#   * Points: 5, 3, 2, 1
-# * **Category 2** – Sgurr Summit North, Sgurr Summit South, London Fox Hill, London Leith Hill
-#   * Points: 10, 8, 6, 5, 4, 3, 2, 1
-# * **Category 1** – London Keith Hill
-#   * Points: 20, 15, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1
-#     """)
-# ---------------------------------------
-
-# selected_sheet = st.selectbox("Select Leaderboard View", options=sheet_names, index=sheet_idx)
-# st.query_params["sheet"] = selected_sheet
-
 # --- 4. DATA PROCESSING ---
 df = all_sheets[selected_sheet]
 if selected_sheet != "Team GC":
@@ -236,10 +112,6 @@ if 'total_time' in sort_cols and 'temp_sort_time' in df.columns:
 # 3. Sort and reset index
 df = df.sort_values(by=sort_cols, ascending=sort_orders).reset_index(drop=True)
 
-# # 4. Clean up by dropping the temporary column so it doesn't show in the UI
-# if 'temp_sort_time' in df.columns:
-#     df = df.drop(columns=['temp_sort_time'])
-
 # --- 5. UI & FILTERING ---
 st.title(f"🏆 {selected_event}: {selected_sheet}")
 m1, m2, m3, m4 = st.columns(4)
@@ -248,25 +120,34 @@ st.divider()
 # Check which columns exist to build our filters
 has_pen = 'pen' in df.columns
 has_category = 'category' in df.columns
+has_age = 'age' in df.columns
 
-if has_pen or has_category:
+if has_pen or has_category or has_age:
     # Create two side-by-side columns for the filters
-    filter_col1, filter_col2 = st.columns(2)
+    filter_col1, filter_col2, filter_col3 = st.columns(3)
     
     # Initialize defaults
     selected_pen = 'All'
     selected_cat = 'All'
+    selected_age = 'All'
     
     if has_pen:
         with filter_col1:
             pen_options = ['All'] + sorted(df['pen'].dropna().unique().tolist())
             selected_pen = st.selectbox("Filter by pen", options=pen_options, index=0)
-            
-    if has_category:
-        if selected_sheet is not "KQOM" and selected_sheet is not "Sprints":
-            with filter_col2:
-                cat_options = ['All'] + sorted(df['category'].dropna().unique().tolist())
-                selected_cat = st.selectbox("Filter by category", options=cat_options, index=0)
+
+    if selected_sheet == "GC":       
+        if has_category:
+            if selected_sheet is not "KQOM" and selected_sheet is not "Sprints":
+                with filter_col2:
+                    cat_options = ['All'] + sorted(df['category'].dropna().unique().tolist())
+                    selected_cat = st.selectbox("Filter by category", options=cat_options, index=0)
+        
+        if has_age:
+            if selected_sheet is not "KQOM" and selected_sheet is not "Sprints":
+                with filter_col3:
+                    age_options = ['All'] + sorted(df['age'].dropna().unique().tolist())
+                    selected_age = st.selectbox("Filter by age group", options=age_options, index=0)
 
     # Apply the filters to a copy of the dataframe
     filtered_df = df.copy()
@@ -276,6 +157,9 @@ if has_pen or has_category:
         
     if selected_cat != 'All':
         filtered_df = filtered_df[filtered_df['category'] == selected_cat]
+    
+    if selected_age != 'All':
+        filtered_df = filtered_df[filtered_df['age'] == selected_age]
         
     # Re-sort strictly by time if 'All' is selected for either filter
     if selected_pen == 'All' or selected_cat == 'All':
