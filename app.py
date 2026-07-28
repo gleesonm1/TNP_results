@@ -312,7 +312,7 @@ if not filtered_df.empty:
                       np.round(filtered_df['W/kg'].loc[filtered_df['W/kg'] == filtered_df['W/kg'].max()].iloc[0],3)) + " W/kg",
                       filtered_df['name'].loc[filtered_df['W/kg'] == filtered_df['W/kg'].max()].iloc[0])
 
-render_podium(filtered_df)
+# render_podium(filtered_df)
 
 # --- 6. STYLING & DISPLAY ---
 def highlight_podium(row):
