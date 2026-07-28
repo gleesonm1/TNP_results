@@ -315,9 +315,9 @@ render_podium(filtered_df)
 
 # --- 6. STYLING & DISPLAY ---
 def highlight_podium(row):
-    colors = {0: 'background-color: #D4AF37; color: black; font-weight: bold', 
-              1: 'background-color: #C0C0C0; color: black', 
-              2: 'background-color: #CD7F32; color: black'}
+    colors = {1: 'background-color: #D4AF37; color: black; font-weight: bold', 
+              2: 'background-color: #C0C0C0; color: black', 
+              3: 'background-color: #CD7F32; color: black'}
     return [colors.get(row.name, '')] * len(row)
 
 # Standardize column configs for the dataframe
@@ -329,6 +329,8 @@ column_main_config = {
     "total_time": "Time",
     "time_offset": "Gap",
 }
+
+filtered_df.index = range(1, len(filtered_df) + 1)
 
 st.dataframe(
     filtered_df.style.apply(highlight_podium, axis=1),
