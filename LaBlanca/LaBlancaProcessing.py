@@ -491,6 +491,7 @@ elif args.mode == "add":
             'category': 'first',
             'name': 'first',
             'team_name': 'first',
+            'age': 'first',
             **{c: 'min' for c in time_cols}   # keep round times
         })
     )
