@@ -176,6 +176,8 @@ if args.mode == "all":
                 
                 if len(df)>0:
                     df = df[columns]
+                    df['race_id'] = np.zeros(len(df)) + i
+
                     
                     dfs.append(df)
 
@@ -439,6 +441,7 @@ elif args.mode == "add":
         df = asyncio.run(fetch_race_data(i))
         
         df = df[columns]
+        df['race_id'] = np.zeros(len(df)) + i
 
         res = out[matched_round]
         res = res.rename(columns={'time'+matched_round[-1]: 'time'})

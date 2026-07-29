@@ -20,7 +20,8 @@ EVENT_CONFIG = {
             (['races', 'total_time'], [True, True]) if sheet == "GC" else
             (['racers', 'total_time'], [False, True]) if sheet == "Team GC" else
             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
-            (['pen', 'Total Points'], [True, False])
+            (['pen', 'Total Points'], [True, False]),
+        "GC_calc": "raw_GC"
     },
     "La Roja": {
         "file": "LaRoja/LaRoja.xlsx",

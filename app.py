@@ -24,7 +24,8 @@ with link_col2:
 st.markdown("<hr style='margin-top: 5px; margin-bottom: 5px;'>", unsafe_allow_html=True)
 
 @st.cache_data
-@st.cache_data
+
+# --- 2. useful key functions ---
 def load_excel_data(file_path, last_modified):
     """
     By adding last_modified as an argument, Streamlit will 
@@ -41,20 +42,6 @@ def clean_data(df):
     if 'team_name' in df.columns:
         df['team_name'] = df['team_name'].apply(lambda x: html.unescape(str(x)) if pd.notnull(x) else "")
     return df.replace(['None', 'none', 'NaN'], '')
-
-def create_rider_links(row):
-    name = html.unescape(str(row['name']))
-    zwift_id = row.get('zwift_id')
-
-    if pd.isna(zwift_id) or zwift_id == "" or zwift_id == 0:
-        return name
-    
-    # URLs
-    zp_url = f"https://zwiftpower.com/profile.php?z={int(zwift_id)}"
-    zr_url = f"https://www.zwiftracing.app/riders/{int(zwift_id)}"
-
-    
-    return f"{name} ([ZR]({zp_url}))"# [ZRapp]({zr_url}))"
 
 def render_podium(df):
     """Renders a responsive 3-step podium for the top 3 riders in the filtered dataframe."""
@@ -149,6 +136,8 @@ if all_sheets is None:
 
 # --- RENDER EVENT RULES / IMAGE ---
 render_event_info(selected_event)
+
+
 # -----------------------------------
 
 # Handle Sheet selection via URL
