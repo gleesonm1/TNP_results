@@ -178,15 +178,20 @@ st.divider()
 has_pen = 'pen' in df.columns
 has_category = 'category' in df.columns
 has_age = 'age' in df.columns
+has_velo = 'velocategory' in df.columns:
 
-if has_pen or has_category or has_age:
+if has_pen or has_category or has_age or has_velo:
     # Create two side-by-side columns for the filters
-    filter_col1, filter_col2, filter_col3 = st.columns(3)
+    if not has_velo:
+        filter_col1, filter_col2, filter_col3 = st.columns(3)
+    else:
+        filter_col1, filter_col2, filter_col3, filter_col4 = st.columns(4)
     
     # Initialize defaults
     selected_pen = 'All'
     selected_cat = 'All'
     selected_age = 'All'
+    selected_velo = 'All'
     
     if has_pen:
         with filter_col1:
@@ -206,6 +211,12 @@ if has_pen or has_category or has_age:
                     age_options = ['All'] + sorted(df['age'].dropna().unique().tolist())
                     selected_age = st.selectbox("Filter by age group", options=age_options, index=0)
 
+        if has_velo:
+            if selected_sheet != "KQOM" and selected_sheet != "Sprints":
+                with filter_col3:
+                    velo_options = ['All'] + sorted(df['velocategory'].dropna().unique().tolist())
+                    selected_velo = st.selectbox("Filter by vELO category", options=velo_options, index=0)
+
     # Apply the filters to a copy of the dataframe
     filtered_df = df.copy()
     
@@ -217,6 +228,9 @@ if has_pen or has_category or has_age:
     
     if selected_age != 'All':
         filtered_df = filtered_df[filtered_df['age'] == selected_age]
+
+    if selected_velo != 'All':
+        filtered_df = filtered_df[filtered_df['velocategory'] == selected_velo]
         
     # Re-sort strictly by time if 'All' is selected for either filter
     # if selected_pen == 'All' or selected_cat == 'All':

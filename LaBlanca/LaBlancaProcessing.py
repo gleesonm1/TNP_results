@@ -156,6 +156,21 @@ async def fetch_prime_data(race_id):
 
     return data_dict[str(race_id)]['data']
 
+def add_velo(gc):
+    velo_df = pd.read_csv("http://zwift.willmsmith.co.uk/data/2%20-%20Team%20Not%20Pogi%20La%20Blanca%202026.csv")[['zwift_id', 'velocategory', 'veloscore']]
+
+    gc['zwift_id'] = gc['zwift_id'].astype(int)
+    velo_df['zwift_id'] = velo_df['zwift_id'].astype(int)
+
+    # 2. Merge columns onto the main GC DataFrame
+    gc = gc.merge(
+        velo_df[['zwift_id', 'velocategory', 'veloscore']], 
+        on='zwift_id', 
+        how='left'
+    )
+
+    return gc
+
 
 if args.mode == "all":
     #### INDIVIDUAL GC ####
@@ -251,8 +266,10 @@ if args.mode == "all":
 
     gc.sort_values(by = ['pen', 'races', 'total_time'], ascending = [True, False, True], 
                 ignore_index=True, inplace = True)
+    
+    gc = add_velo(gc)
 
-    out['GC'] = gc[['pen', 'category', 'age', 'name', 'team_name', 'total_time', 'time_offset', 'races']]
+    out['GC'] = gc[['pen', 'category', 'age', 'name', 'velocategory', 'veloscore', 'team_name', 'total_time', 'time_offset', 'races']]
 
     #### TEAM GC ######
     teams = gc['team_name'].unique()
