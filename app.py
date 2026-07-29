@@ -178,7 +178,7 @@ st.divider()
 has_pen = 'pen' in df.columns
 has_category = 'category' in df.columns
 has_age = 'age' in df.columns
-has_velo = 'velocategory' in df.columns:
+has_velo = 'velocategory' in df.columns
 
 if has_pen or has_category or has_age or has_velo:
     # Create two side-by-side columns for the filters
