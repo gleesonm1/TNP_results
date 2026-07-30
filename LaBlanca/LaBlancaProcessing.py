@@ -534,7 +534,9 @@ elif args.mode == "add":
     gc.sort_values(by = ['pen', 'races', 'total_time'], ascending = [True, False, True], 
                 ignore_index=True, inplace = True)
 
-    out['GC'] = gc[['pen', 'category', 'age', 'name', 'team_name', 'total_time', 'time_offset', 'races']]
+    gc = add_velo(gc)
+
+    out['GC'] = gc[['pen', 'category', 'age', 'name', 'velocategory', 'veloscore', 'team_name', 'total_time', 'time_offset', 'races']]
 
     #### TEAM GC ######
     teams = gc['team_name'].unique()
