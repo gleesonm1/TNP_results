@@ -182,14 +182,14 @@ else:
     if 'e_gap' in df.columns:
         # Check if already float/int (seconds) or string time
         if pd.api.types.is_numeric_dtype(df['e_gap']):
-            df['temp_sort_time'] = pd.to_timedelta(df['e_gap'], unit='s')
+            df['e_gap'] = pd.to_timedelta(df['e_gap'], unit='s')
         else:
             time_str = df['e_gap'].astype(str).apply(
                 lambda x: '00:' + x if x.count(':') == 1 
                 else ('00:00:' + x if x.count(':') == 0 
                 else x)
             )
-            df['temp_sort_time'] = pd.to_timedelta(time_str, errors='coerce')
+            df['e_gap'] = pd.to_timedelta(time_str, errors='coerce')
 
 # Apply Sorting from Config
 sort_cols, sort_orders = config["sorting"](selected_sheet)
