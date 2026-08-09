@@ -123,8 +123,8 @@ Stage 2 - Watopia Sprint \n
 Fastest 15 times through each segment are awared the following points: [20,18,16,14,12,10,9,8,7,6,5,4,3,2,1]
 
 KQOM segments: \n
-Stage 1 - Montmartre KOM - fastest 8 times are awarded the following points: [10,8,6,5,4,3,2,1]   \n
-Stage 2 - Titans Grove Reverse KOM - fastest 8 times are awarded the following points: [10,8,6,5,4,3,2,1]   \n 
+Stage 1 - Montmartre KOM \n
+Stage 2 - Titans Grove Reverse KOM & Volcano KOM \n 
 
 As in the La Blanca series, the climbs are split into different categorites:
 * **Category 2** – Montmartre KOM and Titans Grove Reverse KOM
