@@ -154,10 +154,18 @@ if selected_sheet != "Team GC":
     df = clean_data(df)
 
 # 1. Create a temporary numeric time column for accurate sorting
-if 'total_time' in df.columns:
-    # If a time is only "MM:SS.ms" (1 colon), prepend "00:" so pandas reads it as "HH:MM:SS.ms"
-    time_str = df['total_time'].astype(str).apply(lambda x: '00:' + x if str(x).count(':') == 1 else x)
-    df['temp_sort_time'] = pd.to_timedelta(time_str, errors='coerce')
+if selected_sheet != "e_gap":
+    if 'total_time' in df.columns:
+        # If a time is only "MM:SS.ms" (1 colon), prepend "00:" so pandas reads it as "HH:MM:SS.ms"
+        time_str = df['total_time'].astype(str).apply(lambda x: '00:' + x if str(x).count(':') == 1 else x)
+        df['temp_sort_time'] = pd.to_timedelta(time_str, errors='coerce')
+else:
+    time_str = df['e_gap'].astype(str).apply(
+        lambda x: '00:' + x if x.count(':') == 1 
+        else ('00:00:' + x if x.count(':') == 0 
+        else x)
+    )
+    df['e_gap'] = pd.to_timedelta(time_str, errors='coerce')
 
 # Apply Sorting from Config
 sort_cols, sort_orders = config["sorting"](selected_sheet)
@@ -244,6 +252,8 @@ if has_pen or has_category or has_age or has_velo:
             filtered_df = filtered_df.sort_values(by=['races','total_time'], ascending=[False,True])
         elif selected_sheet == "Team GC":
             filtered_df = filtered_df.sort_values(by=['racers','total_time'], ascending=[False,True])
+    elif 'e_gap' in filtered_df.columns:
+        filtered_df = filtered_df.sort_values(by=['e_gap'], ascending=True)
             
     filtered_df = filtered_df.reset_index(drop=True)
 else:
