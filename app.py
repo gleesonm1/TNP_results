@@ -43,6 +43,25 @@ def clean_data(df):
         df['team_name'] = df['team_name'].apply(lambda x: html.unescape(str(x)) if pd.notnull(x) else "")
     return df.replace(['None', 'none', 'NaN'], '')
 
+def format_egap(td):
+    if pd.isna(td):
+        return ""
+    
+    total_seconds = td.total_seconds()
+    if total_seconds == 0:
+        return "00.000 s"
+        
+    hours = int(total_seconds // 3600)
+    minutes = int((total_seconds % 3600) // 60)
+    seconds = total_seconds % 60
+
+    if hours > 0:
+        return f"{hours:02d}:{minutes:02d}:{seconds:06.3f}"
+    elif minutes > 0:
+        return f"{minutes:02d}:{seconds:06.3f}"
+    else:
+        return f"{seconds:06.3f} s"
+
 def render_podium(df):
     """Renders a responsive 3-step podium for the top 3 riders in the filtered dataframe."""
     if df.empty or 'name' not in df.columns:
@@ -160,12 +179,17 @@ if selected_sheet != "e_gap":
         time_str = df['total_time'].astype(str).apply(lambda x: '00:' + x if str(x).count(':') == 1 else x)
         df['temp_sort_time'] = pd.to_timedelta(time_str, errors='coerce')
 else:
-    time_str = df['e_gap'].astype(str).apply(
-        lambda x: '00:' + x if x.count(':') == 1 
-        else ('00:00:' + x if x.count(':') == 0 
-        else x)
-    )
-    df['e_gap'] = pd.to_timedelta(time_str, errors='coerce')
+    if 'e_gap' in df.columns:
+        # Check if already float/int (seconds) or string time
+        if pd.api.types.is_numeric_dtype(df['e_gap']):
+            df['temp_sort_time'] = pd.to_timedelta(df['e_gap'], unit='s')
+        else:
+            time_str = df['e_gap'].astype(str).apply(
+                lambda x: '00:' + x if x.count(':') == 1 
+                else ('00:00:' + x if x.count(':') == 0 
+                else x)
+            )
+            df['temp_sort_time'] = pd.to_timedelta(time_str, errors='coerce')
 
 # Apply Sorting from Config
 sort_cols, sort_orders = config["sorting"](selected_sheet)
@@ -342,6 +366,9 @@ column_main_config = {
     "total_time": "Time",
     "time_offset": "Gap",
 }
+
+if 'e_gap' in filtered_df.columns and pd.api.types.is_timedelta64_dtype(filtered_df['e_gap']):
+    filtered_df['e_gap'] = filtered_df['e_gap'].apply(format_egap)
 
 filtered_df.index = range(1, len(filtered_df) + 1)
 
