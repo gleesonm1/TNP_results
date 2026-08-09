@@ -60,7 +60,7 @@ def format_egap(td):
     elif minutes > 0:
         return f"{minutes:02d}:{seconds:06.3f}"
     else:
-        return f"{seconds:06.3f} s"
+        return f"{seconds:06.3f}"
 
 def render_podium(df):
     """Renders a responsive 3-step podium for the top 3 riders in the filtered dataframe."""

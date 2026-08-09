@@ -277,6 +277,51 @@ if args.mode == "all":
 
     out['GC'] = gc[['zwift_id', 'pen', 'category', 'age', 'name', 'velocategory', 'veloscore', 'team_name', 'total_time', 'time_offset', 'races']]
 
+            #### eGAP ####
+    e_gap = {}
+
+    max_race_ids = out['GC'].loc[out['GC']["races"] == out['GC']["races"].max(), "zwift_id"]
+
+    for key, df in out.items():
+        if df.empty:
+            continue
+            
+        df_filtered = df[df["zwift_id"].isin(max_race_ids)].copy()
+        
+        if key != "GC":
+            # Determine the round number dynamically (e.g., "Round 1" -> "1" -> "time1")
+            round_num = key.split()[-1]
+            time_col = f"time{round_num}"
+            
+            rtype = race_type.get(key, "scratch")
+            
+            if rtype == "TT":
+                # Group by 'pen' and subtract the min round time within that pen
+                min_times = df_filtered.groupby('pen')[time_col].transform('min')
+                df_filtered['e_gap'] = df_filtered[time_col] - min_times
+                
+            elif rtype == "scratch":
+                # Group by both 'pen' and 'race_id' and subtract the winning race time
+                min_times = df_filtered.groupby(['pen', 'race_id'])[time_col].transform('min')
+                df_filtered['e_gap'] = df_filtered[time_col] - min_times
+
+        e_gap[key] = df_filtered
+
+    egap_totals = (
+        pd.concat([
+            df[['zwift_id', 'e_gap']] 
+            for k, df in e_gap.items() 
+            if k != 'GC' and 'e_gap' in df.columns
+        ])
+        .groupby('zwift_id', as_index=False)['e_gap']
+        .sum()
+    )
+
+    # Merge the accumulated total into the GC DataFrame
+    e_gap['GC'] = e_gap['GC'].merge(egap_totals, on='zwift_id', how='left')
+
+    e_gap['GC'] = e_gap['GC'][['zwift_id', 'pen', 'category', 'age', 'name', 'velocategory', 'veloscore', 'team_name', 'e_gap', 'total_time']]
+
     #### TEAM GC ######
     teams = gc['team_name'].unique()
 
