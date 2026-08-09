@@ -31,6 +31,15 @@ EVENT_CONFIG = {
             (['racers', 'total_time'], [False, True]) if sheet == "Team GC" else
             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
             (['pen', 'Total Points'], [True, False])
+    },
+    "TNP Summer Championships": {
+        "file": "TNP_Summer_Championships/SummerChamps.xlsx",
+        "default_sheet": "GC",
+        "sorting": lambda sheet: 
+            (['races', 'total_time'], [True, True]) if sheet == "GC" else
+            (['racers', 'total_time'], [False, True]) if sheet == "Team GC" else
+            (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
+            (['pen', 'Total Points'], [True, False])
     }
 }
 
@@ -90,6 +99,41 @@ Total time across the 5 stages will determine the GC winner. For team GC the bes
 ### Sprint and KQOM standings
 TBD
         """)
+
+    elif selected_event == "TNP Summer Championships":
+        st.markdown("## TNP Summer Championships")
+        
+        # Display image if present
+        hero_image = "icons/SummerChamps.png"
+        if os.path.exists(hero_image):
+            st.image(hero_image, width=600)
+
+        st.markdown("""            
+## Rules
+Total time across the 2 stages will determine the GC winner. There are two time slots for each race, if you race both your best time will be counted.
+
+### Sprint and KQOM standings
+Stage 1 is mostly about the sprints, stage 2 is where the KQOM will be decided!
+                    
+All segments are scored as FTS with only your best time counting! All segments are counted once, regardless of whether you go through that segment just once, or multiple times.
+                    
+Sprint segments: \n
+Stage 1 - Lutece Sprint, Tchou Tchou Sprint, Monceau Sprint \n
+Stage 2 - Watopia Sprint \n
+Fastest 15 times through each segment are awared the following points: [20,18,16,14,12,10,9,8,7,6,5,4,3,2,1]
+
+KQOM segments: \n
+Stage 1 - Montmartre KOM - fastest 8 times are awarded the following points: [10,8,6,5,4,3,2,1]   \n
+Stage 2 - Titans Grove Reverse KOM - fastest 8 times are awarded the following points: [10,8,6,5,4,3,2,1]   \n 
+
+As in the La Blanca series, the climbs are split into different categorites:
+* **Category 2** – Montmartre KOM and Titans Grove Reverse KOM
+  * Points: [10,8,6,5,4,3,2,1]
+* **Category 1** – Volcano KOM
+  * Points: [20,15,12,10,8,7,6,5,4,3,2,1]            
+        """)
+        
+       
 
     elif selected_event == "London-Watopia":
         # Add future text or images for London-Watopia here if needed
