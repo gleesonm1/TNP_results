@@ -786,6 +786,7 @@ elif args.mode == "add":
 
 final = {}
 final['GC'] = out['GC']
+final['e_gap'] = e_gap['GC']
 final['Team GC'] = team_gc['GC']
 final['Sprints'] = sprint
 final['KQOM'] = KQOM 
@@ -796,6 +797,8 @@ for f in final:
     final[f] = final[f].fillna(0.0)
     for k in final[f].columns:
         if 'time' in k:
+            final[f][k] = final[f][k].apply(format_seconds)
+        elif 'e_gap' in k:
             final[f][k] = final[f][k].apply(format_seconds)
     
     if "races" in final[f]:
