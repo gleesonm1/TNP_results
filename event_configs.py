@@ -20,7 +20,7 @@ EVENT_CONFIG = {
             (['races', 'total_time'], [True, True]) if sheet == "GC" else
             (['racers', 'total_time'], [False, True]) if sheet == "Team GC" else
             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
-            (['pen', 'e_gap'], [True, True]) if sheet == "e_gap" else
+            (['pen', 'e_gap', 'total_time'], [True, True,True]) if sheet == "e_gap" else
             (['pen', 'Total Points'], [True, False]),
         "GC_calc": "raw_GC"
     },
@@ -31,6 +31,7 @@ EVENT_CONFIG = {
             (['races', 'total_time'], [True, True]) if sheet == "GC" else
             (['racers', 'total_time'], [False, True]) if sheet == "Team GC" else
             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
+            (['pen', 'e_gap', 'total_time'], [True, True,True]) if sheet == "e_gap" else
             (['pen', 'Total Points'], [True, False])
     },
     "TNP Summer Championships": {
