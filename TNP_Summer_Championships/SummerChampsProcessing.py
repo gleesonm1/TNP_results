@@ -72,7 +72,7 @@ KQOM_list = {
 
 # define how to determine rank of rider if present in multiple rounds
 def choose_pen(df):
-    eligible = df[df['count'] >= len(round) - 1]
+    eligible = df[df['count'] >= len(round) - 0]
     if not eligible.empty:
         return (
             eligible
@@ -266,6 +266,7 @@ if args.mode == "all":
         #### eGAP ####
     e_gap = {}
 
+    pen_map = out['GC'].set_index('zwift_id')['pen']
     max_race_ids = out['GC'].loc[out['GC']["races"] == out['GC']["races"].max(), "zwift_id"]
 
     for key, df in out.items():
@@ -273,6 +274,9 @@ if args.mode == "all":
             continue
             
         df_filtered = df[df["zwift_id"].isin(max_race_ids)].copy()
+
+        if "zwift_id" in df_filtered.columns:
+            df_filtered['pen'] = df_filtered['zwift_id'].map(pen_map)
         
         if key != "GC":
             # Determine the round number dynamically (e.g., "Round 1" -> "1" -> "time1")
