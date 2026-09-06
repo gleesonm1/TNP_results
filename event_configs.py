@@ -97,10 +97,37 @@ The main GC classification is based on the pen entered by each rider. As these a
 **Results will be updated at least twice a day, at approximately 8 am and 10 pm Pacific Time**
                 
 ## Rules
-Total time across the 5 stages will determine the GC winner. For team GC the best three times for each team on each stage will be counted. We won't calculate egap initially, this may change based on demand and numbers.
+Total time across the 5 stages will determine the GC winner. For team GC the best three times for each team on each stage will be counted. A separate eGap classification will also be available with the eGap calculated as the time to the fastest person in your category, in your race (with the excpetion of the iTT on stage 3), that has completed all events.
 
 ### Sprint and KQOM standings
-TBD
+                    
+#### Sprints
+To be included in the Sprint/KQOM standings you must complete every stage!
+                    
+This series is a sprinter's 'paradise'... there are a total of 14 sprint segments across the series (excluding the iTT on stage 3):
+                    
+Stage 1: Alley Sprint Reverse, Castle Sprint Reverse, and Tower Sprint
+                    
+Stage 2: Stoneway Sprint, Acropolis Sprint, Sasquatch Sprint, & Woodland Sprint (all forward and reverse directions - bring your sprinting legs!)
+                    
+Stage 5: Lutece Sprint, Monceau Sprint, Tchou Tchou Sprint
+
+All segments will be scored via FTS. Points will be awarded to the top 15 times (across all races) in each category from 20 points for 1st to 1 point for 15th:  
+* 20, 18, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+
+#### KQOMs
+There are only 3 KQOM segments across the series. All three fall within the last 2 stages and all three will be tackled multiple times. Only you best time counts, so time your effort wisely!
+
+Stage 4: Sgurr Summit North & Sgurr Summit South
+                    
+Stage 5: Montemartre KOM 
+                    
+All segments will be scored via FTS. Points will be awarded to the top 15 times (across all races) in each category from 20 points for 1st to 1 point for 15th:  
+* 20, 18, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 
+                    
+### GC Classifications
+The main GC classification is based on the pen entered by each rider. As these are mass start events each rider will be classified in the highest pen they entered unless they ride 4 races in a lower pen. Please use the options below to see how the GC would look if you filter by pace category or age group!
+
         """)
 
     elif selected_event == "TNP Summer Championships":
