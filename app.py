@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import html
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Import your event configs and UI helper
 from event_configs import EVENT_CONFIG, render_event_info
@@ -150,7 +150,7 @@ else:
 
 # --- LAST UPDATED BOX ---
 if mtime > 0:
-    last_updated = datetime.fromtimestamp(mtime).strftime("%B %d, %Y at %I:%M %p")
+    last_updated = datetime.fromtimestamp(mtime, tz=timezone.utc).strftime("%B %d, %Y at %I:%M %p UTC")
     with link_col3:
         st.markdown(
             f"""
