@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import html
+from datetime import datetime
 
 # Import your event configs and UI helper
 from event_configs import EVENT_CONFIG, render_event_info
@@ -146,6 +147,21 @@ if os.path.exists(file_path):
     mtime = os.path.getmtime(file_path)
 else:
     mtime = 0
+
+# --- LAST UPDATED BOX ---
+if mtime > 0:
+    last_updated = datetime.fromtimestamp(mtime).strftime("%B %d, %Y at %I:%M %p")
+    with link_col3:
+        st.markdown(
+            f"""
+            <div style="background-color:#1E1E1E; border:1px solid #333; border-radius:8px;
+                        padding:6px 14px; margin-bottom:12px; display:inline-block;">
+                <span style="color:#AAA; font-size:0.85em;">🕒 Last updated:</span>
+                <span style="color:#FFD700; font-weight:600; font-size:0.85em; margin-left:4px;">{last_updated}</span>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 all_sheets = load_excel_data(file_path, mtime)
 
