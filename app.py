@@ -176,9 +176,13 @@ if selected_sheet != "Team GC":
 if selected_sheet != "e_gap":
     if 'total_time' in df.columns:
         # If a time is only "MM:SS.ms" (1 colon), prepend "00:" so pandas reads it as "HH:MM:SS.ms"
-        time_str = df['total_time'].astype(str).apply(lambda x: '00:' + x if str(x).count(':') == 1 else x)
+        time_str = df['total_time'].astype(str).apply(
+                lambda x: '00:' + x if x.count(':') == 1 
+                else ('00:00:' + x if x.count(':') == 0 
+                else x)
+            )
         df['temp_sort_time'] = pd.to_timedelta(time_str, errors='coerce')
-else:
+elif selected_sheet == "e_gap":
     if 'e_gap' in df.columns:
         # Check if already float/int (seconds) or string time
         if pd.api.types.is_numeric_dtype(df['e_gap']):
@@ -191,12 +195,23 @@ else:
             )
             df['e_gap'] = pd.to_timedelta(time_str, errors='coerce')
 
+if "Round" in selected_sheet:
+    # If a time is only "MM:SS.ms" (1 colon), prepend "00:" so pandas reads it as "HH:MM:SS.ms"
+    time_str = df['time'+selected_sheet[-1]].astype(str).apply(
+            lambda x: '00:' + x if x.count(':') == 1 
+            else ('00:00:' + x if x.count(':') == 0 
+            else x)
+        )
+    df['temp_sort_time'] = pd.to_timedelta(time_str, errors='coerce')
+
 # Apply Sorting from Config
 sort_cols, sort_orders = config["sorting"](selected_sheet)
 
 # 2. If 'total_time' is in the sorting logic, swap it for our temporary time column
 if 'total_time' in sort_cols and 'temp_sort_time' in df.columns:
     sort_cols = ['temp_sort_time' if c == 'total_time' else c for c in sort_cols]
+elif 'Round' in selected_sheet and 'temp_sort_time' in df.columns:
+    sort_cols = ['temp_sort_time' if 'time' in c else c for c in sort_cols]
 
 # 3. Sort and reset index
 df = df.sort_values(by=sort_cols, ascending=sort_orders).reset_index(drop=True)
@@ -271,6 +286,8 @@ if has_pen or has_category or has_age or has_velo:
             filtered_df = filtered_df.sort_values(by=['races','temp_sort_time'], ascending=[False,True])
         if selected_sheet == "Team GC":
             filtered_df = filtered_df.sort_values(by=['racers','temp_sort_time'], ascending=[False,True])
+        if 'Round' in selected_sheet:
+            filtered_df = filtered_df.sort_values(by=['temp_sort_time'], ascending=[True])
     elif 'total_time' in filtered_df.columns:
         if selected_sheet == "GC":
             filtered_df = filtered_df.sort_values(by=['races','total_time'], ascending=[False,True])
@@ -285,36 +302,37 @@ else:
 
 if 'temp_sort_time' in filtered_df.columns and not filtered_df.empty:
     # Find the max races and create a mask for those riders
-    if 'races' in filtered_df.columns:
-        max_races = filtered_df['races'].max()
-        mask = filtered_df['races'] == max_races
-    elif 'racers' in filtered_df.columns:
-        max_races = filtered_df['racers'].max()
-        mask = filtered_df['racers'] == max_races
-    
-    # Calculate the raw gap using the Timedelta column 
-    # (Index 0 is guaranteed to be the fastest since we just sorted it)
-    fastest_time = filtered_df.loc[0, 'temp_sort_time']
-    raw_gaps = filtered_df.loc[mask, 'temp_sort_time'] - fastest_time
-    
-    # Helper function to convert Timedelta back to "+HH:MM:SS.ms" or "+MM:SS.ms"
-    def format_gap(td):
-        if pd.isna(td) or td.total_seconds() == 0:
-            return "00.000" # Leader / No gap
+    if "Round" not in selected_sheet:
+        if 'races' in filtered_df.columns:
+            max_races = filtered_df['races'].max()
+            mask = filtered_df['races'] == max_races
+        elif 'racers' in filtered_df.columns:
+            max_races = filtered_df['racers'].max()
+            mask = filtered_df['racers'] == max_races
         
-        total_sec = td.total_seconds()
-        h = int(total_sec // 3600)
-        m = int((total_sec % 3600) // 60)
-        s = total_sec % 60
+        # Calculate the raw gap using the Timedelta column 
+        # (Index 0 is guaranteed to be the fastest since we just sorted it)
+        fastest_time = filtered_df.loc[0, 'temp_sort_time']
+        raw_gaps = filtered_df.loc[mask, 'temp_sort_time'] - fastest_time
         
-        if h > 0:
-            return f"+{h:02d}:{m:02d}:{s:06.3f}"
-        else:
-            return f"+{m:02d}:{s:06.3f}"
+        # Helper function to convert Timedelta back to "+HH:MM:SS.ms" or "+MM:SS.ms"
+        def format_gap(td):
+            if pd.isna(td) or td.total_seconds() == 0:
+                return "00.000" # Leader / No gap
             
-    # Apply the formatted string back to your gap column
-    filtered_df["time_offset"] = ""
-    filtered_df.loc[mask, 'time_offset'] = raw_gaps.apply(format_gap)
+            total_sec = td.total_seconds()
+            h = int(total_sec // 3600)
+            m = int((total_sec % 3600) // 60)
+            s = total_sec % 60
+            
+            if h > 0:
+                return f"+{h:02d}:{m:02d}:{s:06.3f}"
+            else:
+                return f"+{m:02d}:{s:06.3f}"
+                
+        # Apply the formatted string back to your gap column
+        filtered_df["time_offset"] = ""
+        filtered_df.loc[mask, 'time_offset'] = raw_gaps.apply(format_gap)
 
 # 4. Clean up by dropping the temporary column so it doesn't show in the UI
 if 'temp_sort_time' in df.columns:
