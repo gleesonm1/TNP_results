@@ -402,16 +402,17 @@ if args.mode == "all":
     names = []
     race_sprint = {} 
     for idx, key in enumerate(round):
-        race_id = round[key]
-        if len(race_id) > 0:
-            for i in race_id: 
-                race_sprint[i] = asyncio.run(fetch_prime_data(i))
+        if race_type[key] != "TT":
+            race_id = round[key]
+            if len(race_id) > 0:
+                for i in race_id: 
+                    race_sprint[i] = asyncio.run(fetch_prime_data(i))
 
-                if len(race_sprint[i])>0.0:
-                    for k in range(len(race_sprint[i][0]['sprints'])):
-                        name = race_sprint[i][0]['sprints'][k]['name']
-                        if name not in names:
-                            names.append(name)
+                    if len(race_sprint[i])>0.0:
+                        for k in range(len(race_sprint[i][0]['sprints'])):
+                            name = race_sprint[i][0]['sprints'][k]['name']
+                            if name not in names:
+                                names.append(name)
 
     with open('prime_raw.pkl', 'wb') as f:
         pickle.dump([names, race_sprint], f)
