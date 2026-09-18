@@ -303,7 +303,16 @@ if args.mode == "all":
 
             e_gap[key] = df_filtered
         # else:
-    e_gap['GC'] = out['GC']
+            
+    egap_gc = out['GC'].copy()
+    egap_gc_filtered = egap_gc[egap_gc["zwift_id"].isin(max_race_ids)].copy()
+    e_gap['GC'] = egap_gc_filtered
+
+    # for k, d in e_gap.items():
+    #     if k == 'GC':
+    #         continue
+    #     print(k, len(d), d['e_gap'].describe(), d['zwift_id'].dtype)
+    # print('GC zwift_id dtype:', e_gap['GC']['zwift_id'].dtype, len(e_gap['GC']))
 
     egap_totals = (
         pd.concat([
