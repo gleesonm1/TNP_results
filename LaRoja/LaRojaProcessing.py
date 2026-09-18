@@ -166,7 +166,7 @@ async def fetch_prime_data(race_id):
 if args.mode == "all":
     #### INDIVIDUAL GC ####
     out = {}
-    e_gap = {}
+    e_gap_raw = {}
 
     gc_cols = ['pen', 'category', 'zwift_id', 'name', 'team_name', 'age']
     columns = ['pen', 'category', 'zwift_id', 'name', 'team_name', 'age', 'time']
@@ -177,6 +177,7 @@ if args.mode == "all":
         dfs = [] 
         race_id = round[key]
         res = pd.DataFrame()
+        res_e_gap = pd.DataFrame()
         if len(race_id) > 0:
             for i in race_id:
                 df = asyncio.run(fetch_race_data(i))
@@ -190,20 +191,27 @@ if args.mode == "all":
 
             if len(dfs)>0:
                 res = pd.concat(dfs, ignore_index=True)
+                res_e_gap = res.copy()
 
                 # if duplicates only take lowest time
                 res = res.loc[res.groupby('zwift_id')['time'].idxmin()].reset_index(drop=True)
 
                 res.sort_values(by = ['pen', 'time'], ignore_index=True, inplace = True)
+                res_e_gap.sort_values(by = ['pen','time'], ignore_index=True, inplace=True)
 
                 res = res.rename(columns={'time': 'time'+str(idx+1)})
+                res_e_gap = res_e_gap.rename(columns = {'time':'time'+str(idx+1)})
                 
                 gc_cols.append('time'+str(idx+1))
 
         out[key] = res
+        e_gap_raw[key] = res_e_gap
 
     with open('gc_raw.pkl', 'wb') as f:
         pickle.dump(out, f)
+
+    with open('egap_raw.pkl', 'wb') as f:
+        pickle.dump(e_gap_raw, f)
 
     all_rounds = [
         df[df.columns.intersection(gc_cols)] # Only take columns that exist in THIS df
@@ -268,7 +276,7 @@ if args.mode == "all":
 
     max_race_ids = out['GC'].loc[out['GC']["races"] == out['GC']["races"].max(), "zwift_id"]
 
-    for key, df in out.items():
+    for key, df in e_gap_raw.items():
         if df.empty:
             continue
             
@@ -291,7 +299,11 @@ if args.mode == "all":
                 min_times = df_filtered.groupby(['pen', 'race_id'])[time_col].transform('min')
                 df_filtered['e_gap'] = df_filtered[time_col] - min_times
 
-        e_gap[key] = df_filtered
+            df_filtered = df_filtered.loc[df_filtered.groupby('zwift_id')['e_gap'].idxmin()].reset_index(drop=True)
+
+            e_gap[key] = df_filtered
+        # else:
+    e_gap['GC'] = out['GC']
 
     egap_totals = (
         pd.concat([
@@ -485,6 +497,9 @@ elif args.mode == "add":
     with open('gc_raw.pkl', 'rb') as f:
         out = pickle.load(f)
 
+    with open('e_gap_raw.pkl', 'rb') as f:
+        e_gap_raw = pickle.load(f)
+
     round_idx = 1
     for i in race_id:
         # identify round
@@ -506,7 +521,13 @@ elif args.mode == "add":
 
         res = res.rename(columns={'time': 'time'+matched_round[-1]})
 
-        out[matched_round] = res
+        res_egap = e_gap_raw[matched_round]
+        res_egap = res_egap.rename(columns={'time'+matched_round[-1]: 'time'})
+        res_egap = pd.concat([res_egap, df], ignore_index=True)
+
+        res_egap = res_egap.rename(columns={'time': 'time'+matched_round[-1]})
+
+        e_gap_raw[matched_round] = res_egap
 
         # round = int(matched_round[-1])
     while round_idx <= int(5):
@@ -515,6 +536,9 @@ elif args.mode == "add":
 
     with open('gc_raw.pkl', 'wb') as f:
         pickle.dump(out, f)
+
+    with open('e_gap_raw.pkl', 'wb') as f:
+        pickle.dump(e_gap_raw, f)
 
     gc_cols = list(dict.fromkeys(gc_cols))
 
@@ -581,7 +605,7 @@ elif args.mode == "add":
 
     max_race_ids = out['GC'].loc[out['GC']["races"] == out['GC']["races"].max(), "zwift_id"]
 
-    for key, df in out.items():
+    for key, df in e_gap_raw.items():
         if df.empty:
             continue
             
@@ -604,8 +628,11 @@ elif args.mode == "add":
                 min_times = df_filtered.groupby(['pen', 'race_id'])[time_col].transform('min')
                 df_filtered['e_gap'] = df_filtered[time_col] - min_times
 
-        e_gap[key] = df_filtered
+            df_filtered = df_filtered.loc[df_filtered.groupby('zwift_id')['e_gap'].idxmin()].reset_index(drop=True)
 
+            e_gap[key] = df_filtered
+
+    e_gap['GC'] = out['GC']
     egap_totals = (
         pd.concat([
             df[['zwift_id', 'e_gap']] 
