@@ -166,6 +166,7 @@ async def fetch_prime_data(race_id):
 if args.mode == "all":
     #### INDIVIDUAL GC ####
     out = {}
+    e_gap = {}
 
     gc_cols = ['pen', 'category', 'zwift_id', 'name', 'team_name', 'age']
     columns = ['pen', 'category', 'zwift_id', 'name', 'team_name', 'age', 'time']
