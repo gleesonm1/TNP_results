@@ -43,6 +43,16 @@ EVENT_CONFIG = {
             (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
             (['pen', 'e_gap', 'total_time'], [True, True,True]) if sheet == "e_gap" else
             (['pen', 'Total Points'], [True, False])
+    },
+    "Project 3": {
+        "file": "Project3/Project3.xlsx",
+        "default_sheet": "GC",
+        "sorting": lambda sheet: 
+            (['races', 'total_time'], [True, True]) if sheet == "GC" else
+            (['racers', 'total_time'], [False, True]) if sheet == "Team GC" else
+            (['pen', f"time{sheet[-1]}"], [True, True]) if "Round" in sheet else
+            (['pen', 'e_gap', 'total_time'], [True, True,True]) if sheet == "e_gap" else
+            (['pen', 'Total Points'], [True, False])
     }
 }
 
@@ -162,6 +172,33 @@ As in the La Blanca series, the climbs are split into different categorites:
 * **Category 1** – Volcano KOM
   * Points: [20,15,12,10,8,7,6,5,4,3,2,1]            
         """)
+
+    elif selected_event == "Project 3":
+            st.markdown("## Project 3")
+            
+            # Display image if present
+            # hero_image = "icons/La_Roja_Tour_poster.png"
+            # if os.path.exists(hero_image):
+            #     st.image(hero_image, width=600)
+    
+            st.markdown("""
+    **Results will be updated at least twice a day, at approximately 8 am and 10 pm Pacific Time**
+                    
+    ## Rules
+    Total time across the 3 stages will determine the GC winner. For team GC the best three times for each team on each stage will be counted. A separate eGap classification will also be available with the eGap calculated as the time to the fastest person in your category, in your race, that has completed all events.
+    
+    ### Sprint and KQOM standings
+
+    To be included in the Sprint/KQOM standings you must complete every stage!
+
+    All segments will be scored via FTS. Points will be awarded to the top 15 times (across all races) in each category from 20 points for 1st to 1 point for 15th:  
+    * 20, 18, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+    
+                        
+    ### GC Classifications
+    The main GC classification is based on the pen entered by each rider. As these are mass start events each rider will be classified in the highest pen they entered. Please use the options below to see how the GC would look if you filter by pace category or age group!
+    
+            """)
         
        
 
