@@ -36,7 +36,7 @@ zp_session.login()
 # set up information
 round = {'Round 1': [5732496,5732497,5732498,5732499,5732500],
          'Round 2': [5732503,5732504,5732505,5732508,5732509],
-         'Round 3': []}
+         'Round 3': [5732512,5732514,5732515,5732516,5732517]}
 
 race_type = {'Round 1': "scratch",
          'Round 2': "scratch",
